@@ -1,0 +1,8 @@
+{
+    "teamA": [
+        {"name":"member1" , "attendance":1, "longAbsentee":false, "bibleRead":2, "bibleMemorise":false},
+        {"name":"member2" , "attendance":2, "longAbsentee":false, "bibleRead":1, "bibleMemorise":true},
+        {"name":"member3" , "attendance":3, "longAbsentee":true, "bibleRead":0, "bibleMemorise":false},
+        {"name":"member4" , "attendance":2, "longAbsentee":false, "bibleRead":4, "bibleMemorise":true}
+    ]
+}

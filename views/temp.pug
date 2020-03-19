@@ -1,0 +1,51 @@
+doctype html
+html
+    head   
+        meta(charset='utf-8')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+
+    body
+        div.header
+        div.week
+            
+        div.subTitle
+            h3 2020.03.21
+        div.at_or_st
+            a(href='/thisweek?menu="attendance"') 출석체크
+            h &nbsp&nbsp
+            a(href='/thisweek?menu="study"') 공과
+        div.attendance
+            table
+                th
+                -for(let gNum=0;gNum<4; gNum++)
+                    tr
+                        td #{weekly.teamA[gNum].name}
+                        td 
+                            -
+                                let attendance='';
+                                if(weekly.teamA[gNum].attendance===1){
+                                    attendance='출석'
+                                }else if(weekly.teamA[gNum].attendance===2){
+                                    attendance='지각'
+                                }else if(weekly.teamA[gNum].attendance===3){
+                                    attendance='결석'
+                                }else{
+                                    attendance='error'
+                                };
+                            input(type='button' value=attendance)
+                        td
+                            -    let longAbsentee=weekly.teamA[gNum].longAbsentee ?'장기결근': '_정상_'
+                            input(type='button' value=longAbsentee)
+                
+        div.study
+            table
+                th
+                -for(let gNum=0;gNum<4; gNum++)
+                    tr
+                        td #{weekly.teamA[gNum].name}
+                        td 
+                            input(type='button' value=weekly.teamA[gNum].bibleRead)
+                        td 
+                            - let bibleMemorise= weekly.teamA[gNum].bibleMemorise? '암송완료!':'암송아직ㅜ';
+                            input(type='button' value=bibleMemorise)
+        div.footer
