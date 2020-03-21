@@ -4,22 +4,27 @@ div.attendance
             th 이름
             th 출석
             th 장결
-        -for(let gNum=0;gNum<4; gNum++)
+        //-gNum 범위 재설정!
+        -for(let gNum=0;gNum<weekly[team].length; gNum++)
             tr
-                td #{weekly.teamA[gNum].name}
+                td #{weekly[team][gNum].name}
                 td 
                     -
                         let attendance='';
-                        if(weekly.teamA[gNum].attendance===1){
+                        if(weekly[team][gNum].attendance===1){
                             attendance='출석'
-                        }else if(weekly.teamA[gNum].attendance===2){
+                        }else if(weekly[team][gNum].attendance===2){
                             attendance='지각'
-                        }else if(weekly.teamA[gNum].attendance===3){
+                        }else if(weekly[team][gNum].attendance===3){
                             attendance='결석'
                         }else{
                             attendance='error'
                         };
-                    input(type='button' value=attendance name='attendance' id=weekly.teamA[gNum].name onclick="changeAt(this)")
+                    input(type='button' value=attendance name='attendance' id=weekly[team][gNum].name onclick="changeAt(this)")
                 td
-                    -    let longAbsentee=weekly.teamA[gNum].longAbsentee ?'장기결근': '_정상_'
-                    input(type='button' value=longAbsentee name='longAbsentee' id=weekly.teamA[gNum].name onclick="changeAt(this)")
+                    -    let longAbsentee=weekly[team][gNum].longAbsentee ?'장기결근': '_정상_'
+                    input(type='button' value=longAbsentee name='longAbsentee' id=weekly[team][gNum].name onclick="changeAt(this)")
+        tr
+            td
+                input(type='button' value='new member' onclick="newMember(this)")
+            //-완성후 study에 복사

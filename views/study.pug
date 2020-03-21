@@ -4,11 +4,14 @@ div.study
             th 이름
             th 성경
             th 암송
+            th info
         -for(let gNum=0;gNum<4; gNum++)
             tr
-                td #{weekly.teamA[gNum].name}
+                td #{weekly[team][gNum].name}
                 td 
-                    input(type='button' value=weekly.teamA[gNum].bibleRead name='bibleRead' id=weekly.teamA[gNum].name onclick="changeAt(this)")
+                    input(type='button' value=weekly[team][gNum].bibleRead name='bibleRead' id=weekly[team][gNum].name onclick="changeAt(this)")
                 td 
-                    - let bibleMemorise= weekly.teamA[gNum].bibleMemorise? '암송완료!':'암송아직ㅜ';
-                    input(type='button' value=bibleMemorise name='bibleMemorise' id=weekly.teamA[gNum].name onclick="changeAt(this)")
+                    - let bibleMemorise= weekly[team][gNum].bibleMemorise? '암송완료!':'암송아직ㅜ';
+                    input(type='button' value=bibleMemorise name='bibleMemorise' id=weekly[team][gNum].name onclick="changeAt(this)")
+                td
+                    input(type='button' value='...' id=weekly[team][gNum].name onclick="moreInfo(this)")

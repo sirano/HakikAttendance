@@ -1,0 +1,14 @@
+doctype html
+html
+    head   
+        title Home
+        meta(charset='utf-8')
+        
+    body
+        div.header
+            h1 Welcome!
+        div.selectTeam
+            - for( let iNum=0;iNum<teams.length;iNum++)
+                a(href='/thisweek?team='+teams[iNum].teamName+'&week='+week) #{teams[iNum].teamName}
+                br
+        div.footer

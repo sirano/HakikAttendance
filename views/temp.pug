@@ -1,26 +1,46 @@
 doctype html
 html
     head   
+        title thisweek
         meta(charset='utf-8')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
 
     body
         div.header
         div.week
-            
+            ul
+                -for(let iNum=0;iNum<dirs.length; iNum++)
+                    -let dirname=dirs[iNum].substr(0,9)
+                    li
+                        a(href='/thisweek?menu=attendance&team='+team+'&week='+dirname) #{dirname}
         div.subTitle
-            h3 2020.03.21
+            h3 #{team}
+            h4 #{week.substr(0,4)}년 #{week.substr(5,2)}월  #{week.substr(8)}주
         div.at_or_st
-            a(href='/thisweek?menu=attendance') 출석체크
+            a(href='/thisweek?menu=attendance&team='+team+'&week='+week) 출석체크
             h &nbsp&nbsp
-            a(href='/thisweek?menu=study') 공과
+            a(href='/thisweek?menu=study&team='+team+'&week='+week) 공과
         script.
             function changeAt(self){
                 let type=self.name;
                 let name=self.id;
-                location.href=`/thisweek_process?type=${type}&name=${name}`;
+                let myTeam="#{team}";
+                let _week="#{week}"
+                location.href=`/thisweek_process?type=${type}&team=${myTeam}&week=${_week}&name=${name}`;
+            };
+            function moreInfo(self){
+                let name=self.id;
+                let _week="#{week}"
+                location.href=`/moreInfo?name=${name}&week=${_week}`
+            };
+            function newMember(self){
+                let myTeam="#{team}";
+                let _week="#{week}"
+                location.href=`/newMember?team=${myTeam}&week=${_week}`
             };
         case mainDiv 
+            when undefined
+                include attendance
             when 'attendance'
                 include attendance
             when 'study'

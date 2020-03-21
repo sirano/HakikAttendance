@@ -1,0 +1,130 @@
+{
+    "member1":{
+        "name":"member1",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member2":{
+        "name":"member2",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member3":{
+        "name":"member3",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member4":{
+        "name":"member4",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member5":{
+        "name":"member5",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member6":{
+        "name":"member6",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member7":{
+        "name":"member7",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member8":{
+        "name":"member8",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member9":{
+        "name":"member9",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member10":{
+        "name":"member10",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member11":{
+        "name":"member11",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member12":{
+        "name":"member12",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member13":{
+        "name":"member13",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member14":{
+        "name":"member14",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member15":{
+        "name":"member15",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    },
+    "member16":{
+        "name":"member16",
+        "phoneNumber":"010-1234-1234",
+        "home":"인천시 미추홀구 여기가어딘가",
+        "brithday":'2002.03.21'
+        "longAbsentee": false,
+        "specialInfo":""
+    }
+}
