@@ -11,4 +11,8 @@ html
             - for( let iNum=0;iNum<teams.length;iNum++)
                 a(href='/thisweek?team='+teams[iNum].teamName+'&week='+week) #{teams[iNum].teamName}
                 br
+            br
+            br
+        div.result
+            a(href='/weekResult?week='+week) RESULT
         div.footer

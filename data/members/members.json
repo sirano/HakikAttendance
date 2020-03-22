@@ -104,7 +104,7 @@
         "home": "인천시 미추홀구 여기가어딘가",
         "brithday": "2002.03.21",
         "team": "teamC",
-        "longAbsentee": false,
+        "longAbsentee": true,
         "specialInfo": ""
     },
     {
@@ -140,7 +140,7 @@
         "home": "인천시 미추홀구 여기가어딘가",
         "brithday": "2002.03.21",
         "team": "teamD",
-        "longAbsentee": false,
+        "longAbsentee": true,
         "specialInfo": ""
     },
     {
@@ -149,7 +149,7 @@
         "home": "",
         "brithday": "",
         "team": "teamB",
-        "longAbsentee": false,
+        "longAbsentee": true,
         "specialInfo": "",
         "birthday": "0000.00.00"
     },
@@ -160,9 +160,8 @@
         "brithday": "",
         "team": "teamA",
         "joinDate": "2020.03_3",
-        "longAbsentee": false,
+        "longAbsentee": true,
         "specialInfo": "안녕!",
         "birthday": "1988.06.18"
     }
-
 ]

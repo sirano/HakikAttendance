@@ -1,0 +1,29 @@
+[ //밖에는 대괄호
+    { //안에는 중괄호
+        "name": "정민성",                    //이름
+        "phoneNumber": "010-4180-8246",     //전화번호. 서식 안중요
+        "home": "인천시 미추홀구 여기가어딘가", //주소. 서식 안중요
+        "brithday": "1988.06.18",           //생일. 얘도 안중요
+        "team": "민성조",                    //조이름
+        "longAbsentee": false,              //기본값 false, 장결자는 true 
+        "specialInfo": "말을 안들음"           //특이사항. 안적어도됨
+    },
+    {
+        "name": "장세희",
+        "phoneNumber": "01075763364",
+        "home": "서울 구로구 은행골에서 초밥먹고싶다",
+        "brithday": "1993.06.17",
+        "longAbsentee": false,
+        "team": "퇴근시켜조",
+        "specialInfo": ""
+    },
+    {
+        "name": "조윤호",
+        "phoneNumber": "010-4133-6335",
+        "home": "서울 강서구 허준로 139 강변3단지",
+        "brithday": "2002.03.21",
+        "team": "휴가보내조",
+        "longAbsentee": true,
+        "specialInfo": "평택에서 유배중"
+    }
+]

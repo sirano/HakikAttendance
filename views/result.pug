@@ -1,0 +1,21 @@
+div.result
+    table
+        tr
+            td 조
+            td 총점
+            td 순위
+        -for( let iNum=0;iNum<teams.length;iNum++)
+                
+            case rank.final[iNum]
+                when 1
+                    tr(style='font-weight:bold')
+                        td= teams[iNum]
+                        td= totalPoint[iNum]
+                        td= rank.final[iNum]
+                default
+                    tr
+                        td= teams[iNum]
+                        td= totalPoint[iNum]
+                        td= rank.final[iNum]
+    br
+    a(href='/weekResult?menu=detailed') 상세보기

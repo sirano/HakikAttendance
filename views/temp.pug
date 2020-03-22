@@ -7,7 +7,9 @@ html
 
     body
         div.header
-        div.week
+            h1 
+                a(href='/') HOME
+        div.week 
             ul
                 -for(let iNum=0;iNum<dirs.length; iNum++)
                     -let dirname=dirs[iNum].substr(0,9)
@@ -16,10 +18,6 @@ html
         div.subTitle
             h3 #{team}
             h4 #{week.substr(0,4)}년 #{week.substr(5,2)}월  #{week.substr(8)}주
-        div.at_or_st
-            a(href='/thisweek?menu=attendance&team='+team+'&week='+week) 출석체크
-            h &nbsp&nbsp
-            a(href='/thisweek?menu=study&team='+team+'&week='+week) 공과
         script.
             function changeAt(self){
                 let type=self.name;
@@ -45,6 +43,8 @@ html
                 include attendance
             when 'study'
                 include study
+            when 'result'
+                include result
         
         
         div.footer

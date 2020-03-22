@@ -37,13 +37,17 @@ v 주차별 기록
     -...누르면? 남은목록들 어떻게 보여주지?
     __출석__
     v 출석,공과 입력&저장 매커니즘 만들기
-    - 장결자: weekly에 있으면 안됨. members에 있어야 함
+    v 장결자: weekly 와 members 둘 모두 에 있어야 함
     v New Member 버튼 
     -리팩토라이징
     __공과__
     v매커니즘 만들기, 저장
     
 __결과창__
+- 조별 데이터 모으기 : 주차별,반별 / 출석 지각 장결 성경 요절
+    
+- 조별 데이터 읽어와서 랭킹 만들기
+
 __기타__
     __뉴멤버__
         -등록후 해당주차에 추가
@@ -54,11 +58,11 @@ __디자인__
 __데이터__
 -json?? mySQL이 뭔지 알아야하지 않ㅇ르까?
 v 매주 이니셜파일 생성하기!!!!!!!
-    -홈을 실행시켰을때
-    -해당주차 파일이 있는지 없는지 확인한다
-    -만약없다면 만든다
-    -teams를 읽는다 -> initial 데이터 만든다
-    -members를 읽는다 -> 해당팀에 집어넣는다 ->initial 정보를 넣는다
+    v홈을 실행시켰을때
+    v-해당주차 파일이 있는지 없는지 확인한다
+    v-만약없다면 만든다
+    v-teams를 읽는다 -> initial 데이터 만든다
+    v-members를 읽는다 -> 해당팀에 집어넣는다 ->initial 정보를 넣는다
 
 
 ___에러___
@@ -80,7 +84,8 @@ function makeNewWeekly(teams,weekNo, callbackFunc){
         "name": "",
         "attendance": 0,
         "bibleRead": 0,
-        "bibleMemorise": false
+        "bibleMemorise": false,
+        "longAbsentee": true
     };
     let initialInfos_copy=''
     for(let i=0; i<teams.length;i++){
@@ -90,19 +95,65 @@ function makeNewWeekly(teams,weekNo, callbackFunc){
         let members=JSON.parse(data2);
         for(let j=0;j<members.length;j++){
             let herTeam=members[j].team;
-            initialInfos.name=members[j].name;
+            initialInfos.name=members[j].name; //initialInfos에 이름 넣어주기
+            initialInfos.longAbsentee=members[j].longAbsentee; //initialInfos에 장결여부 넣어주기
             initialInfos_copy=JSON.parse(JSON.stringify(initialInfos)); //딕셔너리인 Infos를 문자열 Infos_copy로 바꾸어 깊은 복사!
             initialWeekly[herTeam].push(initialInfos_copy);
         };
         let initialWeekly_string=JSON.stringify(initialWeekly);
         fs.writeFile(`data/weekly/${weekNo}.json`, initialWeekly_string, (err)=>{
-            callbackFunc();
+            callbackFunc(); //콜백
         });
     });
 }
 
 
-
+// 분야별 등수 세우기        
+// 총점수
+// 총등수
+function calRank(result_count,teamList, callbackFunc){
+    let atPoint=[];
+    let readPoint=[];
+    let memoPoint=[];
+    let totalPoint=[]
+    let rule={1:5,2:4,3:3,4:2,5:1};
+    
+    for (let i=0;i<teamList.length;i++){
+        let initPoint=0
+        initPoint+= result_count[teamList[i]].attendance *10;
+        initPoint+= result_count[teamList[i]].tardy*5;
+        initPoint+= (result_count[teamList[i]].total -result_count[teamList[i]].longAbsentee -result_count[teamList[i]].attendance )*-2;
+        initPoint/= result_count[teamList[i]].total -result_count[teamList[i]].longAbsentee
+        atPoint.push(initPoint);
+        
+        initPoint=0
+        initPoint+= result_count[teamList[i]].bibleRead;
+        initPoint/= result_count[teamList[i]].attendance+result_count[teamList[i]].tardy;
+        readPoint.push(initPoint);
+        
+        initPoint=0
+        initPoint+= result_count[teamList[i]].bibleMemorise;
+        initPoint/= result_count[teamList[i]].attendance+result_count[teamList[i]].tardy;
+        memoPoint.push(initPoint);
+    };
+    console.log(atPoint,readPoint,memoPoint);
+    
+    function getRanks(arr) {
+        var sorted = arr.slice().sort(function(a,b){return b-a});
+        return arr.slice().map(function(v){ return sorted.indexOf(v)+1 });
+    };
+    let rank={};
+    rank.at=getRanks(atPoint);
+    rank.read=getRanks(readPoint);
+    rank.memo=getRanks(memoPoint);
+    console.log(rank);
+    for (let i=0;i<teamList.length;i++){
+        totalPoint.push(rule[rank.at[i]]*2+rule[rank.read[i]]+rule[rank.memo[i]]);
+    };
+    console.log(totalPoint);
+    rank.final=getRanks(totalPoint);
+    callbackFunc(rank, totalPoint);
+};
 
 app.get('/',(req,res)=>{
     fs.readFile('data/members/teams.json','utf-8',(err,data)=>{
@@ -161,21 +212,41 @@ app.get('/thisweek_process', function(req,res){
     
     if(qType==='longAbsentee'){
         fs.readFile(`data/weekly/${qweek}.json`,'utf-8',(err,dict)=>{
-            console.log(dict);
-            let Jdict=JSON.parse(dict);
-            let searchNum=-1;
-            let teamList=Jdict[qTeam]; //나중에 조별 수정할때 사용!
-            for (let i=0;i<teamList.length;i++){ //좀더 나은 정렬방법??
-                if(teamList[i].name===qName){
-                    searchNum=i;
-                }
-            };
-            teamList[searchNum][qType]= teamList[searchNum][qType]? false:true;
-            console.log(Jdict)
-            let Jdict_string=JSON.stringify(Jdict);
-            fs.writeFile(`data/weekly/${qweek}.json`,Jdict_string, (err)=>{
-                res.writeHead(302, {Location:'/thisweek?menu=attendance&team='+qTeam+'&week='+qweek});
-                res.end();
+            fs.readFile(`data/members/members.json`,'utf-8',(err,dict2)=>{
+                let Jdict=JSON.parse(dict);
+                let searchNum_week=-1;
+                let teamList=Jdict[qTeam];   
+                for (let i=0;i<teamList.length;i++){ //좀더 나은 정렬방법??
+                    if(teamList[i].name===qName){
+                        searchNum_week=i;
+                    }
+                };        //여기까지 qWeek.json 파일처리
+                
+                let Jmembers=JSON.parse(dict2);
+                let searchNum_mem=-1;
+                for(let i=0;i<Jmembers.length;i++){
+                    if(Jmembers[i].name===qName){
+                        searchNum_mem=i;
+                    }                    
+                };        //여기까지 members.json 파일처리
+                console.log(searchNum_week,searchNum_mem);
+                
+                if(teamList[searchNum_week][qType]){
+                    teamList[searchNum_week][qType]= false;
+                    Jmembers[searchNum_mem][qType]= false;
+                }else{
+                    teamList[searchNum_week][qType]= true;
+                    Jmembers[searchNum_mem][qType]= true;
+                };
+                console.log(teamList[searchNum_week][qType],Jmembers[searchNum_mem][qType]);
+                let Jdict_string=JSON.stringify(Jdict);
+                let Jmembers_string=JSON.stringify(Jmembers);
+                fs.writeFile(`data/weekly/${qweek}.json`,Jdict_string, (err)=>{
+                    fs.writeFile('data/members/members.json',Jmembers_string, (err)=>{
+                        res.writeHead(302, {Location:'/thisweek?menu=attendance&team='+qTeam+'&week='+qweek});
+                        res.end();
+                    });
+                });
             });
         });
     }else if(qType==='attendance'){
@@ -291,6 +362,63 @@ app.post('/newMember_process', (req,res)=>{
                 //
                 res.writeHead(302, {Location:'/thisweek?menu=attendance&team='+qTeam+'&week='+qweek});
                 res.end();
+            });
+        });
+    });
+});
+
+
+
+app.get('/weekResult', (req,res)=>{
+    fs.readFile('data/members/teams.json','utf-8',(err,data)=>{
+        let teams=JSON.parse(data);
+        
+        let _countWeek=date.countWeek(Date())
+        let weekNo=sf("{year:0000}.{month:00}_{weekNo}",_countWeek); //날짜서식 정리
+        let weekly_data=fs.readFileSync(`data/weekly/${weekNo}.json`,'utf-8');
+        let weekly=JSON.parse(weekly_data);
+        
+        let dirs=fs.readdirSync('data/weekly');
+        
+        //initial 세팅하기
+        let teamList=[];
+        let result_count={};
+        let initialResult={
+            'total':0,
+            'attendance':0,
+            'tardy':0,
+            'longAbsentee':0,
+            'bibleRead':0,
+            'bibleMemorise':0,
+        };
+        //결과 집계하기
+        for(let i=0; i<teams.length;i++){
+            teamList.push(teams[i].teamName);
+            result_count[teamList[i]]=JSON.parse(JSON.stringify(initialResult));
+        }
+        for(let i=0; i<teamList.length;i++){
+            let teamMems=weekly[teamList[i]];
+            result_count[teamList[i]].total=teamMems.length;
+            for(let j=0;j<teamMems.length;j++){ 
+                if(teamMems[j].attendance===1){ result_count[teamList[i]].attendance+=1
+                } else if(teamMems[j].attendance===2){ result_count[teamList[i]].tardy+=1};
+                if(teamMems[j].longAbsentee){result_count[teamList[i]].longAbsentee+=1};
+                result_count[teamList[i]].bibleRead+=teamMems[j].bibleRead;
+                if(teamMems[j].bibleMemorise){result_count[teamList[i]].bibleMemorise+=1};
+            };
+        };
+        console.log(result_count);
+        
+        calRank(result_count,teamList,(rank, totalPoint)=>{
+            console.log(rank)
+            console.log
+            res.render('temp',{
+                'teams':teamList,
+                'rank':rank, 
+                'totalPoint':totalPoint,
+                'mainDiv':'result', 
+                'week':weekNo, //필수 query
+                'dirs':dirs
             });
         });
     });
