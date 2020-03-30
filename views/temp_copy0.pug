@@ -1,0 +1,90 @@
+doctype html
+html
+    head   
+        title thisweek
+        meta(charset='utf-8')
+        meta(name='viewport' content='width-device-width' initial-scale='1')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+        script(src='js/bootstrap.js')
+    
+        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous")
+        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous")
+        style
+            include css/style_at.css
+        
+    body.container-lg
+        nav(class='navbar-default navbar  navbar-expand-lg navbar-light bg-light')
+            button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+                span(class="navbar-toggler-icon")
+            h1
+                a.navbar-brand(href='/') HOME
+            div(class='collapse navbar-collapse' id='navbarSupportedContent')
+
+        div
+            h3.display-3 #{team}
+            h4 #{week.substr(0,4)}년 #{week.substr(5,2)}월  #{week.substr(8)}주
+
+        div
+            ul
+                -for(let iNum=0;iNum<dirs.length; iNum++)
+                    -let dirname=dirs[iNum].substr(0,9)
+                    li
+                        a(href='/thisweek?menu=attendance&team='+team+'&week='+dirname) #{dirname}
+        script.
+            function changeAt(self){
+                let type=self.name;
+                let name=self.id;
+                let myTeam="#{team}";
+                let _week="#{week}"
+                location.href=`/thisweek_process?type=${type}&team=${myTeam}&week=${_week}&name=${name}`;
+            };
+            function moreInfo(self){
+                let name=self.id;
+                let _week="#{week}"
+                location.href=`/moreInfo?name=${name}&week=${_week}`
+            };
+            function newMember(self){
+                let myTeam="#{team}";
+                let _week="#{week}"
+                location.href=`/newMember?team=${myTeam}&week=${_week}`
+            };
+
+
+        div.container
+            div.row.justify-content-around#choice
+                div.col
+                    a.btn.btn-custom(href='/thisweek?menu=attendance&team='+team+'&week='+week) 출석체크
+                div.col
+                    a.btn.btn-custom(href='/thisweek?menu=study&team='+team+'&week='+week) 공과
+            
+            div
+                table.table.table-hover.table-custom
+                    tr
+                        th(scope='col') 이름
+                        th(scope='col') 출석
+                        th(scope='col') 장결
+                    //-gNum 범위 재설정!
+                    -for(let gNum=0;gNum<weekly[team].length; gNum++)
+                        tr
+                            th(scope=row) #{weekly[team][gNum].name}
+                            td 
+                                -
+                                    let attendance='';
+                                    if(weekly[team][gNum].attendance===1){
+                                        attendance='출석'
+                                    }else if(weekly[team][gNum].attendance===2){
+                                        attendance='지각'
+                                    }else if(weekly[team][gNum].attendance===3){
+                                        attendance='결석'
+                                    }else{
+                                        attendance='체크안함'
+                                    };
+                                input.btn.btn-custom.btn-secondary(type='button' value=attendance name='attendance' class='btn-'+attendance id=weekly[team][gNum].name onclick="changeAt(this)")
+                            td
+                                -    let longAbsentee=weekly[team][gNum].longAbsentee ?'장기결근': '정상'
+                                -    let AbsenteeClass=weekly[team][gNum].longAbsentee ? 'btn-secondary':'btn-light'
+                                input.btn.btn-custom(type='button' class=AbsenteeClass value=longAbsentee name='longAbsentee' id=weekly[team][gNum].name onclick="changeAt(this)")
+                    tr
+                        td
+                            input.btn.btn-custom.btn-info#btn-newMem(type='button' value='new member' onclick="newMember(this)")
+                        //-완성후 study에 복사

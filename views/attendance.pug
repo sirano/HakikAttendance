@@ -3,16 +3,16 @@ div.at_or_st
     a(href='/thisweek?menu=attendance&team='+team+'&week='+week) 출석체크
     h &nbsp&nbsp
     a(href='/thisweek?menu=study&team='+team+'&week='+week) 공과
-div.attendance
-    table
+div.container-fluid
+    table(class='table')
         tr
-            th 이름
-            th 출석
-            th 장결
+            th(scope='col') 이름
+            th(scope='col') 출석
+            th(scope='col') 장결
         //-gNum 범위 재설정!
         -for(let gNum=0;gNum<weekly[team].length; gNum++)
             tr
-                td #{weekly[team][gNum].name}
+                th(scope=row) #{weekly[team][gNum].name}
                 td 
                     -
                         let attendance='';

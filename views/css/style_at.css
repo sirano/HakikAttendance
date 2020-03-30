@@ -1,0 +1,144 @@
+/* https://github.com/twbs/bootstrap  */
+/* 컬러참고 https://www.picuki.com/media/2007114283640804182 */
+@import url(https://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+*{
+    font-family:'Nanum Gothic';
+}
+*{
+    color:#000000;
+    text-decoration:none;
+}
+*:hover{
+    color:#bbbbbb;
+    text-decoration:none;
+}
+
+
+ div{ /*박스들 영역표시*/
+    border: solid 2px powderblue;
+}
+navbar-brand{
+}
+
+
+
+#choice{
+    text-align:center;
+    vertical-align:middle;
+    margin: 10px;
+}
+#choice .btn-custom{
+    font-size: 1.75rem;
+    line-height: 1.2;
+    background-color: #322d29;
+    color: #d6d0cb;
+    width: 200px;
+    height: 50px;
+}
+/* hover,focus 설정*/
+
+
+
+
+/*table 수정*/
+.table-custom{
+    text-align:center;
+}
+tr{
+    height:40px;
+}
+.btn-custom{
+    width: 100px;
+    height: 40px;
+    
+}
+
+
+.btn-출석 {
+    background-color: #7bc143;
+    border-color: #7bc143;
+    color: #FFF; }
+.btn-출석:hover,
+.btn-출석:focus {
+    border-color: #6fb03a;
+    background-color: #6fb03a;
+    color: #FFF; }
+.btn-출석:active,
+.btn-출석:visited,
+.btn-출석:active:focus,
+.btn-출석:active:hover {
+    border-color: #639d34;
+    background-color: #639d34;
+    color: #FFF; }
+
+
+.btn-결석 {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+.btn-결석:hover {
+  color: #fff;
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+.btn-결석:focus, .btn-결석.focus {
+  color: #fff;
+  background-color: #c82333;
+  border-color: #bd2130;
+  box-shadow: 0 0 0 0.2rem rgba(225, 83, 97, 0.5);
+}
+.btn-결석:active, .btn-결석.active,
+.show > .btn-결석.dropdown-toggle {
+  color: #fff;
+  background-color: #bd2130;
+  border-color: #b21f2d;
+}
+.btn-결석:active:focus, .btn-결석.active:focus,
+.show > .btn-결석.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(225, 83, 97, 0.5);
+}
+.btn-결석:disabled, .btn-결석.disabled {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+
+.btn-지각 {
+  color: #212529;
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+.btn-지각:hover {
+  color: #212529;
+  background-color: #e0a800;
+  border-color: #d39e00;
+}
+.btn-지각:focus, .btn-지각.focus {
+  color: #212529;
+  background-color: #e0a800;
+  border-color: #d39e00;
+  box-shadow: 0 0 0 0.2rem rgba(222, 170, 12, 0.5);
+}
+.btn-지각:active, .btn-지각.active,
+.show > .btn-지각.dropdown-toggle {
+  color: #212529;
+  background-color: #d39e00;
+  border-color: #c69500;
+}
+.btn-지각:active:focus, .btn-지각.active:focus,
+.show > .btn-지각.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(222, 170, 12, 0.5);
+}
+.btn-지각:disabled, .btn-지각.disabled {
+  color: #212529;
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+
+
+#btn-newMem{
+    width: 150px;
+}
+/* hover,focus 설정*/

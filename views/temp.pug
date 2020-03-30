@@ -3,48 +3,60 @@ html
     head   
         title thisweek
         meta(charset='utf-8')
+        meta(name='viewport' content='width-device-width' initial-scale='1')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+        script(src='js/bootstrap.js')
+    
+        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous")
+        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous")
 
+        link(rel='stylesheet' href='css/bootstrap.css')
+        link(rel='stylesheet' href='css/learnboot.css')
+        style.
+            table{
+                text-align:center;
+            }
     body
         div.header
             h1 
                 a(href='/') HOME
-        div.week 
-            ul
-                -for(let iNum=0;iNum<dirs.length; iNum++)
-                    -let dirname=dirs[iNum].substr(0,9)
-                    li
-                        a(href='/thisweek?menu=attendance&team='+team+'&week='+dirname) #{dirname}
-        div.subTitle
-            h3 #{team}
-            h4 #{week.substr(0,4)}년 #{week.substr(5,2)}월  #{week.substr(8)}주
-        script.
-            function changeAt(self){
-                let type=self.name;
-                let name=self.id;
-                let myTeam="#{team}";
-                let _week="#{week}"
-                location.href=`/thisweek_process?type=${type}&team=${myTeam}&week=${_week}&name=${name}`;
-            };
-            function moreInfo(self){
-                let name=self.id;
-                let _week="#{week}"
-                location.href=`/moreInfo?name=${name}&week=${_week}`
-            };
-            function newMember(self){
-                let myTeam="#{team}";
-                let _week="#{week}"
-                location.href=`/newMember?team=${myTeam}&week=${_week}`
-            };
-        case mainDiv 
-            when undefined
-                include attendance
-            when 'attendance'
-                include attendance
-            when 'study'
-                include study
-            when 'result'
-                include result
-        
+        div#body
+            div.week 
+                ul
+                    -for(let iNum=0;iNum<dirs.length; iNum++)
+                        -let dirname=dirs[iNum].substr(0,9)
+                        li
+                            a(href='/thisweek?menu=attendance&team='+team+'&week='+dirname) #{dirname}
+            div.subTitle
+                h3 #{team}
+                h4 #{week.substr(0,4)}년 #{week.substr(5,2)}월  #{week.substr(8)}주
+            script.
+                function changeAt(self){
+                    let type=self.name;
+                    let name=self.id;
+                    let myTeam="#{team}";
+                    let _week="#{week}"
+                    location.href=`/thisweek_process?type=${type}&team=${myTeam}&week=${_week}&name=${name}`;
+                };
+                function moreInfo(self){
+                    let name=self.id;
+                    let _week="#{week}"
+                    location.href=`/moreInfo?name=${name}&week=${_week}`
+                };
+                function newMember(self){
+                    let myTeam="#{team}";
+                    let _week="#{week}"
+                    location.href=`/newMember?team=${myTeam}&week=${_week}`
+                };
+            case mainDiv 
+                when undefined
+                    include attendance
+                when 'attendance'
+                    include attendance
+                when 'study'
+                    include study
+                when 'result'
+                    include result
+
         
         div.footer

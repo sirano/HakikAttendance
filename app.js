@@ -33,24 +33,25 @@ v 주차별 기록
     
     __week__
     v weekly 디렉토리 목록 뽑기
-    - 3개이상 ...처리
-    -...누르면? 남은목록들 어떻게 보여주지?
+=>    - 3개이상 ...처리
+=>    -...누르면? 남은목록들 어떻게 보여주지?
+    
     __출석__
     v 출석,공과 입력&저장 매커니즘 만들기
     v 장결자: weekly 와 members 둘 모두 에 있어야 함
     v New Member 버튼 
-    -리팩토라이징
+=>    -리팩토라이징
+    -모듈 정리. 함수 밖으로 빼기
     __공과__
     v매커니즘 만들기, 저장
     
 __결과창__
-- 조별 데이터 모으기 : 주차별,반별 / 출석 지각 장결 성경 요절
-    
-- 조별 데이터 읽어와서 랭킹 만들기
+v 조별 데이터 모으기 : 주차별,반별 / 출석 지각 장결 성경 요절   
+v 조별 데이터 읽어와서 랭킹 만들기
 
 __기타__
     __뉴멤버__
-        -등록후 해당주차에 추가
+        v 등록후 해당주차에 추가
     v __특이사항__
     v __중요사항weekly__
     
@@ -189,7 +190,7 @@ app.get('/thisweek', function(req,res){
     fs.readdir('data/weekly', (err, dirs) => {
         fs.readFile(`data/weekly/${qweek}.json`,'utf-8', (err, data)=>{
             let weekly=JSON.parse(data);
-            res.render('temp', {
+            res.render('temp_copy0', {
                 'weekly':weekly, 
                 'mainDiv':queryData.menu, 
                 'team':queryData.team, //필수 query
