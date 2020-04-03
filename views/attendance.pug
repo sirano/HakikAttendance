@@ -1,35 +1,43 @@
+div.container-lg
+    div.row.justify-content-around#choice
+        div.col
+            a.btn.btn-main(href='/thisweek?menu=attendance&team='+team+'&week='+week) 출석체크
+        div.col
+            a.btn.btn-main.btn-main-second(href='/thisweek?menu=study&team='+team+'&week='+week) 공과
 
-div.at_or_st
-    a(href='/thisweek?menu=attendance&team='+team+'&week='+week) 출석체크
-    h &nbsp&nbsp
-    a(href='/thisweek?menu=study&team='+team+'&week='+week) 공과
-div.container-fluid
-    table(class='table')
-        tr
-            th(scope='col') 이름
-            th(scope='col') 출석
-            th(scope='col') 장결
-        //-gNum 범위 재설정!
-        -for(let gNum=0;gNum<weekly[team].length; gNum++)
+    div
+        table.table.table-hover.table-custom#weeklyTable
             tr
-                th(scope=row) #{weekly[team][gNum].name}
-                td 
-                    -
-                        let attendance='';
-                        if(weekly[team][gNum].attendance===1){
-                            attendance='출석'
-                        }else if(weekly[team][gNum].attendance===2){
-                            attendance='지각'
-                        }else if(weekly[team][gNum].attendance===3){
-                            attendance='결석'
-                        }else{
-                            attendance='체크안함'
-                        };
-                    input(type='button' value=attendance name='attendance' id=weekly[team][gNum].name onclick="changeAt(this)")
-                td
-                    -    let longAbsentee=weekly[team][gNum].longAbsentee ?'장기결근': '_정상_'
-                    input(type='button' value=longAbsentee name='longAbsentee' id=weekly[team][gNum].name onclick="changeAt(this)")
-        tr
-            td
-                input(type='button' value='new member' onclick="newMember(this)")
-            //-완성후 study에 복사
+                th(scope='col') 이름
+                th(scope='col') 출석
+                th(scope='col') 장결
+            //-gNum 범위 재설정!
+            -for(let gNum=0;gNum<weekly[team].length; gNum++)
+                tr
+                    th(scope='row') #{weekly[team][gNum].name}
+                    td 
+                        -
+                            let attendance='';
+                            let attendanceClass='';
+                            if(weekly[team][gNum].attendance===1){
+                                attendance='출석'
+                                attendanceClass='blue';
+                            }else if(weekly[team][gNum].attendance===2){
+                                attendance='지각'
+                                attendanceClass='yellow';
+                            }else if(weekly[team][gNum].attendance===3){
+                                attendance='결석'
+                                attendanceClass='red';
+                            }else{
+                                attendance='체크안함'
+                                attendanceClass='secondary';
+                            };
+                        input.btn(type='button' value=attendance name='attendance' class='btn-'+attendanceClass id=weekly[team][gNum].name onclick="changeAt(this)")
+                    td
+                        -    let longAbsentee=weekly[team][gNum].longAbsentee ?'장기결근': '정상'
+                        -    let AbsenteeClass=weekly[team][gNum].longAbsentee ? 'btn-secondary':'btn-light'
+                        input.btn(type='button' class=AbsenteeClass value=longAbsentee name='longAbsentee' id=weekly[team][gNum].name onclick="changeAt(this)")
+            tr
+                td#newMem
+                    input.btn.btn-outline-main(type='button' value='new member' onclick="newMember(this)")
+                //-완성후 study에 복사

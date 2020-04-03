@@ -1,6 +1,48 @@
+/*
+출석
+    background-color: #6f9dad;
+    border-color: #6f9dad;
+    color: #FFF;
+지각
+    color: white;
+    background-color: #e0c053;
+    border-color: #e0c053;
+결석
+    color: #fff;
+    background-color: #d76e73;
+    border-color: #d76e73;
+newmem
+    background-color: #ffffff;
+    border-color: #2c256b;
+    color: #2c256b;
+#666 #333
+
+*/
+
 /* https://github.com/twbs/bootstrap  */
 /* 컬러참고 https://www.picuki.com/media/2007114283640804182 */
+/* 도형참고 https://css-tricks.com/the-shapes-of-css/ */
+/*
+#272727 어둠
+#f6f5ef 아이보리
+#007042 메인초록
+#fce6e8 핑크
+#3b1e1a 진갈
+#eca081 연갈
+*/
 @import url(https://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+:root{
+    --mainnavy :#2c256b;
+    --mainnavy-down :#4a438b;
+    --mainblue : #6f9dad;
+    --mainblue-down : #688e9b;
+    --mainyellow : #e0c053;
+    --mainyellow-down : #d8c06a;
+    --mainred :#d76e73;
+    --mainred-down : #d5888c;
+}
+
 *{
     font-family:'Nanum Gothic';
 }
@@ -13,13 +55,211 @@
     text-decoration:none;
 }
 
-
- div{ /*박스들 영역표시*/
-    border: solid 2px powderblue;
+.container-lg{
+    padding:0;
 }
-navbar-brand{
+@media (max-width: 576px) { /*과도하게 창이 작아졌을때, 더이상 작아지지 않도록*/
+    .container-lg{
+        min-width: 540px;
+    }
 }
 
+
+
+
+/*buttons*/
+
+
+
+
+
+
+.btn-main {
+    color: #fff;
+    background-color: var(--mainnavy);
+    border-color: var(--mainnavy);
+}
+.btn-main:hover {
+  color: #fff;
+  background-color: var(--mainnavy-down);
+  border-color: var(--mainnavy-down);
+}
+.btn-main:focus, .btn-main.focus {
+  color: #fff;
+  background-color:var(--mainnavy-down);
+  border-color: var(--mainnavy-down);
+  box-shadow: 0 0 0 0.2rem #93939370;
+}
+.btn-main:active, .btn-main.active,
+.show > .btn-main.dropdown-toggle {
+  color: #fff;
+  background-color: var(--mainnavy-down);
+  border-color: var(--mainnavy-down);
+}
+.btn-main:active:focus, .btn-main.active:focus,
+.show > .btn-main.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem #93939370;
+}
+.btn-main:disabled, .btn-main.disabled {
+    color: #fff;
+    background-color: var(--mainnavy);
+    border-color: var(--mainnavy);
+}
+
+.btn-outline-main {
+  color: var(--mainnavy);
+  border-color: var(--mainnavy);
+}
+.btn-outline-main:hover {
+  color: #fff;
+  background-color: var(--mainnavy);
+  border-color: var(--mainnavy);
+}
+.btn-outline-main:focus, .btn-outline-main.focus {
+  box-shadow: 0 0 0 0.2rem #93939370;
+}
+.btn-outline-main:active, .btn-outline-main.active, .btn-outline-main.dropdown-toggle.show {
+  color: #fff;
+  background-color: var(--mainnavy);
+  border-color: var(--mainnavy);
+}
+.btn-outline-main:active:focus, .btn-outline-main.active:focus, .btn-outline-main.dropdown-toggle.show:focus {
+  box-shadow: 0 0 0 0.2rem #93939370;
+}
+.btn-outline-main:disabled, .btn-outline-main.disabled {
+  color: var(--mainnavy);
+  background-color: transparent;
+}
+
+.btn-blue {
+    color: #fff;
+    background-color: var(--mainblue);
+    border-color: var(--mainblue);
+}
+.btn-blue:hover {
+  color: #fff;
+  background-color: var(--mainblue-down);
+  border-color: var(--mainblue-down);
+}
+.btn-blue:focus, .btn-blue.focus {
+  color: #fff;
+  background-color:var(--mainblue-down);
+  border-color: var(--mainblue-down);
+  box-shadow: 0 0 0 0.2rem #93939370;
+}
+.btn-blue:active, .btn-blue.active,
+.show > .btn-blue.dropdown-toggle {
+  color: #fff;
+  background-color: var(--mainblue-down);
+  border-color: var(--mainblue-down);
+}
+.btn-blue:active:focus, .btn-blue.active:focus,
+.show > .btn-blue.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem #93939370;
+}
+.btn-blue:disabled, .btn-blue.disabled {
+    color: #fff;
+    background-color: var(--mainblue);
+    border-color: var(--mainblue);
+}
+
+.btn-yellow {
+    color: #fff;
+    background-color: var(--mainyellow);
+    border-color: var(--mainyellow);
+}
+.btn-yellow:hover {
+  color: #fff;
+  background-color: var(--mainyellow-down);
+  border-color: var(--mainyellow-down);
+}
+.btn-yellow:focus, .btn-yellow.focus {
+  color: #fff;
+  background-color:var(--mainyellow-down);
+  border-color: var(--mainyellow-down);
+  box-shadow: 0 0 0 0.2rem #93939370;
+}
+.btn-yellow:active, .btn-yellow.active,
+.show > .btn-yellow.dropdown-toggle {
+  color: #fff;
+  background-color: var(--mainyellow-down);
+  border-color: var(--mainyellow-down);
+}
+.btn-yellow:active:focus, .btn-yellow.active:focus,
+.show > .btn-yellow.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem #93939370;
+}
+.btn-yellow:disabled, .btn-yellow.disabled {
+    color: #fff;
+    background-color: var(--mainyellow);
+    border-color: var(--mainyellow);
+}
+
+.btn-red {
+    color: #fff;
+    background-color: var(--mainred);
+    border-color: var(--mainred);
+}
+.btn-red:hover {
+  color: #fff;
+  background-color: var(--mainred-down);
+  border-color: var(--mainred-down);
+}
+.btn-red:focus, .btn-red.focus {
+  color: #fff;
+  background-color:var(--mainred-down);
+  border-color: var(--mainred-down);
+  box-shadow: 0 0 0 0.2rem #93939370;
+}
+.btn-red:active, .btn-red.active,
+.show > .btn-red.dropdown-toggle {
+  color: #fff;
+  background-color: var(--mainred-down);
+  border-color: var(--mainred-down);
+}
+.btn-red:active:focus, .btn-red.active:focus,
+.show > .btn-red.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem #93939370;
+}
+.btn-red:disabled, .btn-red.disabled {
+    color: #fff;
+    background-color: var(--mainred);
+    border-color: var(--mainred);
+}
+
+
+
+
+
+
+
+
+/*================================================================*/
+/*=============         LOCAL                 ====================*/
+/*================================================================*/
+
+/*navbar*/
+
+.navbar-light .navbar-brand {
+    color: #2c256b;
+    font-weight: bold;
+}
+.navbar-light .navbar-toggler {
+    border-color: transparent;
+}
+.navbar-light .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2844, 37, 107, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+.navbar-default{
+    border-bottom: solid 1px #2c256b;
+}
+
+
+
+
+#selectWeek {
+    display: inline-block;
+}
 
 
 #choice{
@@ -27,13 +267,16 @@ navbar-brand{
     vertical-align:middle;
     margin: 10px;
 }
-#choice .btn-custom{
+#choice .btn-main{
     font-size: 1.75rem;
     line-height: 1.2;
-    background-color: #322d29;
-    color: #d6d0cb;
-    width: 200px;
+    background-color: #272658;
+    color: #ffffff;
+    width: -webkit-fill-available;
     height: 50px;
+}
+#choice .btn-main-second{
+    background-color: #44446dd9;
 }
 /* hover,focus 설정*/
 
@@ -44,101 +287,35 @@ navbar-brand{
 .table-custom{
     text-align:center;
 }
+.table-custom td,.table-custom th{
+    vertical-align: middle;
+    
+}
 tr{
     height:40px;
 }
-.btn-custom{
-    width: 100px;
+
+
+
+#weeklyTable .btn{
+    width: -webkit-fill-available;
     height: 40px;
     
 }
 
 
-.btn-출석 {
-    background-color: #7bc143;
-    border-color: #7bc143;
-    color: #FFF; }
-.btn-출석:hover,
-.btn-출석:focus {
-    border-color: #6fb03a;
-    background-color: #6fb03a;
-    color: #FFF; }
-.btn-출석:active,
-.btn-출석:visited,
-.btn-출석:active:focus,
-.btn-출석:active:hover {
-    border-color: #639d34;
-    background-color: #639d34;
-    color: #FFF; }
-
-
-.btn-결석 {
-  color: #fff;
-  background-color: #dc3545;
-  border-color: #dc3545;
+#newMem{
+    border-top: 1px solid transparent;
+    
 }
-.btn-결석:hover {
-  color: #fff;
-  background-color: #c82333;
-  border-color: #bd2130;
-}
-.btn-결석:focus, .btn-결석.focus {
-  color: #fff;
-  background-color: #c82333;
-  border-color: #bd2130;
-  box-shadow: 0 0 0 0.2rem rgba(225, 83, 97, 0.5);
-}
-.btn-결석:active, .btn-결석.active,
-.show > .btn-결석.dropdown-toggle {
-  color: #fff;
-  background-color: #bd2130;
-  border-color: #b21f2d;
-}
-.btn-결석:active:focus, .btn-결석.active:focus,
-.show > .btn-결석.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(225, 83, 97, 0.5);
-}
-.btn-결석:disabled, .btn-결석.disabled {
-  color: #fff;
-  background-color: #dc3545;
-  border-color: #dc3545;
+#weeklyTable .btn-outline-main{
+    width: 100px;
+    font-size : 0.75rem;
+    padding:0;
 }
 
 
-.btn-지각 {
-  color: #212529;
-  background-color: #ffc107;
-  border-color: #ffc107;
+/*footer*/
+#footer{
+    background-color: #e3e3e6;
 }
-.btn-지각:hover {
-  color: #212529;
-  background-color: #e0a800;
-  border-color: #d39e00;
-}
-.btn-지각:focus, .btn-지각.focus {
-  color: #212529;
-  background-color: #e0a800;
-  border-color: #d39e00;
-  box-shadow: 0 0 0 0.2rem rgba(222, 170, 12, 0.5);
-}
-.btn-지각:active, .btn-지각.active,
-.show > .btn-지각.dropdown-toggle {
-  color: #212529;
-  background-color: #d39e00;
-  border-color: #c69500;
-}
-.btn-지각:active:focus, .btn-지각.active:focus,
-.show > .btn-지각.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(222, 170, 12, 0.5);
-}
-.btn-지각:disabled, .btn-지각.disabled {
-  color: #212529;
-  background-color: #ffc107;
-  border-color: #ffc107;
-}
-
-
-#btn-newMem{
-    width: 150px;
-}
-/* hover,focus 설정*/

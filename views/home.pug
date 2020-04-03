@@ -1,18 +1,47 @@
-doctype html
-html
-    head   
-        title Home
-        meta(charset='utf-8')
-        
-    body
-        div.header
-            h1 Welcome!
-        div.selectTeam
+div.header
+    h1 Welcome!
+
+
+
+.card.m-3
+    h5.card-header 이번주 출석체크
+    .card-body
+        .card-deck
             - for( let iNum=0;iNum<teams.length;iNum++)
-                a(href='/thisweek?team='+teams[iNum].teamName+'&week='+week) #{teams[iNum].teamName}
-                br
-            br
-            br
-        div.result
-            a(href='/weekResult?week='+week) RESULT
-        div.footer
+                .card
+                    .card-body
+                        //img.card-img-top(src="..." alt="...")
+                        h5.card-title #{teams[iNum].teamName}
+                        p.card-text ###선생님
+                        a.btn.btn-default.btn-outline-secondary(href='/thisweek?team='+teams[iNum].teamName+'&week='+week) 바로가기
+
+
+.row.row-cols-1.row-cols-md-2.mx-1.my-4
+    .col.mb-4
+        .card
+            //img.card-img-top(src="..." alt="...")
+            .card-body
+                h5.card-title 이번주 결과
+                p.card-text
+                    | 이번주 조별 순위 보러가기
+                a.btn.btn-default.btn-outline-secondary(href='#') 바로가기
+    .col.mb-4
+        .card
+            //img.card-img-top(src="..." alt="...")
+            .card-body
+                h5.card-title 교사 페이지
+                p.card-text
+                    | 교사 페이지
+                a.btn.btn-default.btn-outline-secondary(href='#') 바로가기
+
+
+        
+
+div.selectTeam
+    - for( let iNum=0;iNum<teams.length;iNum++)
+        a(href='/thisweek?team='+teams[iNum].teamName+'&week='+week) #{teams[iNum].teamName}
+        br
+    br
+    br
+div.result
+    a(href='/weekResult?week='+week) RESULT

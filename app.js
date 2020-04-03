@@ -171,7 +171,8 @@ app.get('/',(req,res)=>{
                     res.end();
                 });
             }else{
-                res.render('home',{
+                res.render('basetemp',{
+                    'loadPage': 'home',
                     'week': weekNo, //자동으로 현재 주차 나오도록
                     'teams':teams
                 });
@@ -187,11 +188,15 @@ app.get('/thisweek', function(req,res){
     var pathName = url.parse(_url, true).pathname;
     let queryData=url.parse(_url,true).query;
     let qweek=queryData.week;
+    let teamsBeforeParse=fs.readFileSync('data/members/teams.json','utf-8') //조 이름, 조별 정보 불러오기
+    let teams=JSON.parse(teamsBeforeParse);
     fs.readdir('data/weekly', (err, dirs) => {
         fs.readFile(`data/weekly/${qweek}.json`,'utf-8', (err, data)=>{
             let weekly=JSON.parse(data);
-            res.render('temp_copy0', {
-                'weekly':weekly, 
+            res.render('basetemp', {
+                'loadPage': 'weekly',
+                'teams':teams, //조별정보
+                'weekly':weekly,
                 'mainDiv':queryData.menu, 
                 'team':queryData.team, //필수 query
                 'week':queryData.week, //필수 query
