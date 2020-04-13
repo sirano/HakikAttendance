@@ -1,12 +1,78 @@
 div.container-lg
-    div.row.justify-content-around#choice
+    //div.row.justify-content-around#choice
         div.col
             a.btn.btn-main(href='/thisweek?menu=attendance&team='+team+'&week='+week) 출석체크
         div.col
             a.btn.btn-main.btn-main-second(href='/thisweek?menu=study&team='+team+'&week='+week) 공과
+    //
+        작을때는 스크롤버전, 클때는 스크롤x 
+        6번째칸 지우기
+        스크롤 이쁘게
+        li 를 쓰는게 맞는가?
+        버튼이쁘게
 
-    div
-        table.table.table-hover.table-custom#weeklyTable
+    div.weeklyButtons.m-1
+        div.row.m-1
+            div.col-3.m-0.p-0
+                ul.p-0 
+                    li.tablehead 이름
+                    -for(let gNum=0;gNum<weekly[team].length; gNum++)
+                        li.tablehead #{weekly[team][gNum].name}
+                    li.py-1#newMem
+                        input.btn.btn-outline-main(type='button' value='new member' onclick="newMember(this)")
+            div.col-9#innerBox
+                div
+                    ul.row.tablehead
+                        li.col.tablehead  
+                            p.m-0 출석
+                        li.col.tablehead    
+                            p 장결
+                        li.col.tablehead    
+                            p 성경
+                        li.col.tablehead    
+                            p 요절
+                        li.col.tablehead    
+                            p info
+
+                    -for(let gNum=0;gNum<weekly[team].length; gNum++)
+                        ul.row
+                            li.col.py-1  
+                                -
+                                    let attendance='';
+                                    let attendanceClass='';
+                                    if(weekly[team][gNum].attendance===1){
+                                        attendance='출석'
+                                        attendanceClass='blue';
+                                    }else if(weekly[team][gNum].attendance===2){
+                                        attendance='지각'
+                                        attendanceClass='yellow';
+                                    }else if(weekly[team][gNum].attendance===3){
+                                        attendance='결석'
+                                        attendanceClass='red';
+                                    }else{
+                                        attendance='체크안함'
+                                        attendanceClass='secondary';
+                                    };
+                                input.btn(type='button' value=attendance name='attendance' class='btn-'+attendanceClass id=weekly[team][gNum].name onclick="changeAt(this)")
+
+                            li.col.py-1  
+                                -    let longAbsentee=weekly[team][gNum].longAbsentee ?'장기결석': '정상'
+                                -    let AbsenteeClass=weekly[team][gNum].longAbsentee ? 'btn-secondary':'btn-light'
+                                input.btn(type='button' class=AbsenteeClass value=longAbsentee name='longAbsentee' id=weekly[team][gNum].name onclick="changeAt(this)")
+
+                            li.col.py-1.smaller
+                                -    let BibleClass=weekly[team][gNum].bibleRead*1 >0? 'btn-yellow':'btn-secondary';
+                                input.btn(type='button' class=BibleClass value=weekly[team][gNum].bibleRead name='bibleRead' id=weekly[team][gNum].name onclick="changeAt(this)")
+                            li.col.py-1  
+                                -    let bibleMemorise= weekly[team][gNum].bibleMemorise? '암송완료!':'암송아직ㅜ';
+                                -    let MemoClass=weekly[team][gNum].bibleMemorise ? 'btn-blue':'btn-light';
+                                input.btn(type='button' class=MemoClass value=bibleMemorise name='bibleMemorise' id=weekly[team][gNum].name onclick="changeAt(this)")
+                            li.col.py-1.smaller
+                                input.btn.btn-outline-main(type='button' value='...' id=weekly[team][gNum].name onclick="moreInfo(this)")
+
+        
+    //-div
+        table.table.table-hover.table-custom.mx-3#weeklyTable
             tr
                 th(scope='col') 이름
                 th(scope='col') 출석

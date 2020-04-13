@@ -1,6 +1,5 @@
-div.header
-    h1 Welcome!
-
+.m-2
+    h1 학익교회 중고등부
 
 
 .card.m-3
@@ -24,7 +23,7 @@ div.header
                 h5.card-title 이번주 결과
                 p.card-text
                     | 이번주 조별 순위 보러가기
-                a.btn.btn-default.btn-outline-secondary(href='#') 바로가기
+                a.btn.btn-default.btn-outline-secondary(href='/weekResult?week='+week) 바로가기
     .col.mb-4
         .card
             //img.card-img-top(src="..." alt="...")
@@ -37,11 +36,3 @@ div.header
 
         
 
-div.selectTeam
-    - for( let iNum=0;iNum<teams.length;iNum++)
-        a(href='/thisweek?team='+teams[iNum].teamName+'&week='+week) #{teams[iNum].teamName}
-        br
-    br
-    br
-div.result
-    a(href='/weekResult?week='+week) RESULT

@@ -1,36 +1,46 @@
-doctype html
-html
-    head   
-        title New Member
-        meta(charset='utf-8')
-        
-    body
-        div.header
-            h1 
-                a(href='/') HOME
-        div
-            h3 New Member!
-            form(action="/newMember_process?team="+team+"&week="+week, method="post")
-                p 이름
-                    input(type='text' name='name' placeholder='홍길동' required)
-                p 전화번호
-                    input(type='text' name='phoneNumber' placeholder='000-0000-0000' required)
-                p 주소
-                    input(type='text' name='home' placeholder='인천시 미추홀구...')
-                p 생일
-                    input(type='number' name='year' min="1980" max="2020")
-                    h 년 
-                    input(type='number', name='month' min="1" max="12")
-                    h 월 
-                    input(type='number', name='date' min="1" max="31")
-                    h 일
-                p 조
-                    input(type='text' name='team' value=team required)
-                p 등록일
-                    input(type='text' name='joinDate' value=week)
-                p 기타 사항
-                    br
-                    textarea(name='specialInfo' placeholder='필요한 내용을 적어주세요')
-                input(type='submit', value='저장')
-        div.footer
-    
+div.m-5
+    h3 환영합니다!
+    form(action="/newMember_process?team="+team+"&week="+week, method="post")
+        div.form-group.row
+            div.col-sm-5
+                label.col-form-label 이름
+                input.form-control(type='text' name='name' placeholder='홍길동' required)
+            div.col-sm-7
+                label.col-form-label 전화번호
+                input.form-control(type='text' name='phoneNumber' placeholder='000-0000-0000' required)
+        div.form-group
+            label 주소
+            input.form-control(type='text' name='home' placeholder='인천시 미추홀구...')
+        div.form-group
+            label 생일
+            div.form-row
+                div.col
+                div.col-3
+                    select.custom-select
+                        -for(let i=2020;i>1980;i--)
+                            option= i
+                span 년
+                div.col
+                div.col-3
+                    select.custom-select
+                        -for(let i=2020;i>1980;i--)
+                            option= i
+                span 월
+                div.col
+                div.col-3
+                    select.custom-select
+                        -for(let i=2020;i>1980;i--)
+                            option= i
+                span 일
+                div.col
+        div.form-group.row
+            div.col-sm-6
+                label.col-form-label 조
+                input.form-control(type='text' name='team' value=team required)
+            div.col-sm-6
+                label.col-form-label 등록일
+                input.form-control(type='text' name='joinDate' value=week)
+        div.form-group
+            label 기타 사항
+            textarea.form-control(name='specialInfo' rows='3' placeholder='필요한 내용을 적어주세요')
+        input.btn.btn-main(type='submit', value='저장')

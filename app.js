@@ -327,7 +327,13 @@ app.get('/newMember', (req,res)=>{
     let queryData=url.parse(_url,true).query;
     let qTeam=queryData.team;
     let qweek=queryData.week
-    res.render('newMember',{'team':qTeam, 'week':qweek});
+    let teamsBeforeParse=fs.readFileSync('data/members/teams.json','utf-8') //조 이름, 조별 정보 불러오기
+    let teams=JSON.parse(teamsBeforeParse);
+    res.render('basetemp',{
+        'loadPage': 'newMember',
+        'teams':teams, //조별정보
+        'team':qTeam, 
+        'week':qweek});
 });
 
 app.post('/newMember_process', (req,res)=>{
@@ -418,11 +424,12 @@ app.get('/weekResult', (req,res)=>{
         calRank(result_count,teamList,(rank, totalPoint)=>{
             console.log(rank)
             console.log
-            res.render('temp',{
+            res.render('basetemp',{
+                'loadPage': 'weekly',
+                'mainDiv':'result',
                 'teams':teamList,
                 'rank':rank, 
                 'totalPoint':totalPoint,
-                'mainDiv':'result', 
                 'week':weekNo, //필수 query
                 'dirs':dirs
             });

@@ -1,21 +1,24 @@
-div.result
-    table
+div
+    table.table.table-hover.table-custom.mx-3
         tr
-            td 조
-            td 총점
-            td 순위
+            th(scope='col') 조
+            th(scope='col') 총점
+            th(scope='col') 순위
         -for( let iNum=0;iNum<teams.length;iNum++)
                 
             case rank.final[iNum]
                 when 1
-                    tr(style='font-weight:bold')
-                        td= teams[iNum]
+                    tr.table-first
+                        th(scope='row')= teams[iNum]
                         td= totalPoint[iNum]
                         td= rank.final[iNum]
                 default
                     tr
-                        td= teams[iNum]
+                        th(scope='row')= teams[iNum]
                         td= totalPoint[iNum]
                         td= rank.final[iNum]
-    br
-    a(href='/weekResult?menu=detailed') 상세보기
+        tr
+            td
+            td
+            td#newMem
+                    a.btn.btn-outline-main.btn-sm(href='/weekResult?menu=detailed') 상세보기

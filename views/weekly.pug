@@ -1,9 +1,17 @@
 div
-    h3.display-3 #{team}
+    case mainDiv 
+        when 'result'
+            h3.display-3 result
+        default
+            h3.display-3 #{team}
     span(style='font-size:2rem;') #{week.substr(0,4)}년 #{week.substr(5,2)}월  #{week.substr(8)}주
 
     div.dropdown#selectWeek
-        button.btn.btn-sm.btn-light.dropdown-toggle(type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") 이전 주차 출석 입력하기
+        case mainDiv 
+            when 'result'
+                button.btn.btn-sm.btn-light.dropdown-toggle(type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") 이전 주차 결과 보기
+            default
+                button.btn.btn-sm.btn-light.dropdown-toggle(type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") 이전 주차 출석 입력하기
         div(class="dropdown-menu" )
             -for(let iNum=dirs.length-1;iNum>=0; iNum--)
                 -let dirname=dirs[iNum].substr(0,9)
@@ -36,4 +44,6 @@ case mainDiv
         include attendance
     when 'study'
         include study
+    when 'result'
+        include result
 
