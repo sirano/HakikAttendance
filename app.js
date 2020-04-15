@@ -249,7 +249,7 @@ app.get('/thisweek_process', function(req,res){
                 let Jmembers_string=JSON.stringify(Jmembers);
                 fs.writeFile(`data/weekly/${qweek}.json`,Jdict_string, (err)=>{
                     fs.writeFile('data/members/members.json',Jmembers_string, (err)=>{
-                        res.writeHead(302, {Location:'/thisweek?menu=attendance&team='+qTeam+'&week='+qweek});
+                        res.writeHead(302, {Location:'/thisweek?team='+qTeam+'&week='+qweek});
                         res.end();
                     });
                 });
@@ -274,7 +274,7 @@ app.get('/thisweek_process', function(req,res){
             console.log(Jdict)
             let Jdict_string=JSON.stringify(Jdict);
             fs.writeFile(`data/weekly/${qweek}.json`,Jdict_string, (err)=>{
-                res.writeHead(302, {Location:'/thisweek?menu=attendance&team='+qTeam+'&week='+qweek});
+                res.writeHead(302, {Location:'/thisweek?team='+qTeam+'&week='+qweek});
                 res.end();
             });
         });
@@ -293,7 +293,7 @@ app.get('/thisweek_process', function(req,res){
             console.log(Jdict)
             let Jdict_string=JSON.stringify(Jdict);
             fs.writeFile(`data/weekly/${qweek}.json`,Jdict_string, (err)=>{
-                res.writeHead(302, {Location:'/thisweek?menu=study&team='+qTeam+'&week='+qweek});
+                res.writeHead(302, {Location:'/thisweek?team='+qTeam+'&week='+qweek});
                 res.end();
             });
         });
@@ -312,7 +312,7 @@ app.get('/thisweek_process', function(req,res){
             console.log(Jdict)
             let Jdict_string=JSON.stringify(Jdict);
             fs.writeFile(`data/weekly/${qweek}.json`,Jdict_string, (err)=>{
-                res.writeHead(302, {Location:'/thisweek?menu=study&team='+qTeam+'&week='+qweek});
+                res.writeHead(302, {Location:'/thisweek?team='+qTeam+'&week='+qweek});
                 res.end();
             });
         });
@@ -372,7 +372,7 @@ app.post('/newMember_process', (req,res)=>{
                 //여기다가.. 데이터수정을 해야해
                 //
                 //
-                res.writeHead(302, {Location:'/thisweek?menu=attendance&team='+qTeam+'&week='+qweek});
+                res.writeHead(302, {Location:'/thisweek?team='+qTeam+'&week='+qweek});
                 res.end();
             });
         });

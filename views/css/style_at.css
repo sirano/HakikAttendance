@@ -35,6 +35,9 @@ https://github.com/twbs/bootstrap
     .container-lg{
         min-width: 540px;
     }
+    .infinite{ /*모바일화면에서 깨짐현상 방지*/
+        width:540px;
+    }
 }
 
 
@@ -271,7 +274,7 @@ https://github.com/twbs/bootstrap
     padding:0;
 }
 
-.weeklyButtons #innerBox div{
+.weeklyButtons #innerBox > div{
     width:768px;
 }
 
@@ -286,7 +289,7 @@ https://github.com/twbs/bootstrap
         overflow-x: unset;
     }
     
-    .weeklyButtons #innerBox div{
+    .weeklyButtons #innerBox > div{
         width:auto;
     }
 }
@@ -308,11 +311,26 @@ https://github.com/twbs/bootstrap
     height: 40px;
 }
 
+.weeklyButtons .smaller .form-control{
+    display: inline-block;
+    vertical-align:middle;
+    padding-right: 0px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius:4px;
+    border-bottom-left-radius:4px;
+    width: 50px;
+    height: 40px;
+}
 
 .weeklyButtons .smaller .btn{
-    width: 50px;
+    width: 40px;
+    padding-left: 0px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -9px;
+    margin-top:0.5px;
 } 
-
 
 #newMem{
     border-bottom: 0 !important;

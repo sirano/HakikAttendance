@@ -1,9 +1,9 @@
 div
     case mainDiv 
         when 'result'
-            h3.display-3 result
+            h3.display-4 result
         default
-            h3.display-3 #{team}
+            h3.display-4 #{team}
     span(style='font-size:2rem;') #{week.substr(0,4)}년 #{week.substr(5,2)}월  #{week.substr(8)}주
 
     div.dropdown#selectWeek
@@ -40,10 +40,6 @@ script.
 case mainDiv 
     when undefined
         include attendance
-    when 'attendance'
-        include attendance
-    when 'study'
-        include study
     when 'result'
         include result
 

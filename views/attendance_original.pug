@@ -1,32 +1,16 @@
 div.container-lg
+    //div.row.justify-content-around#choice
+        div.col
+            a.btn.btn-main(href='/thisweek?menu=attendance&team='+team+'&week='+week) 출석체크
+        div.col
+            a.btn.btn-main.btn-main-second(href='/thisweek?menu=study&team='+team+'&week='+week) 공과
+    //
+        작을때는 스크롤버전, 클때는 스크롤x 
+        6번째칸 지우기
+        스크롤 이쁘게
+        li 를 쓰는게 맞는가?
+        버튼이쁘게
 
-    div.weeklyButtons.m-1
-        form.row.m-1(action="/thisweek_process?#####", method="post")
-            div.col-3.m-0.p-0
-                ul.p-0
-                    li.tablehead 이름
-                    -for(let gNum=0;gNum<weekly[team].length; gNum++)
-                        li.tablehead #{weekly[team][gNum].name}
-                    li.py-1#newMem
-                        input.btn.btn-outline-main(type='button' value='new member' onclick="newMember(this)")
-            div.col-9#innerBox
-                 div.form-group
-                    ul.row.tablehead
-                        li.col.tablehead  
-                            p.m-0 출석
-                        li.col.tablehead    
-                            p 성경
-                        li.col.tablehead    
-                            p 요절
-                        li.col.tablehead    
-                            p info
-                        li.col.tablehead    
-                            p 장결
-                    div.form-row
-                        div.col.py-1
-                            
-                    
-            
     div.weeklyButtons.m-1
         div.row.m-1
             div.col-3.m-0.p-0
@@ -72,10 +56,10 @@ div.container-lg
                                 input.btn(type='button' value=attendance name='attendance' class='btn-'+attendanceClass id=weekly[team][gNum].name onclick="changeAt(this)")
                             li.col.py-1.smaller
                                 -    let BibleClass=weekly[team][gNum].bibleRead*1 >0? 'btn-yellow':'btn-secondary';
-                                                                
-                                input.form-control(type='number' class=BibleClass min=0 value=weekly[team][gNum].bibleRead name='0' )
-                                input.btn(type='submit' value='입력' class=BibleClass  name='bibleRead' id=weekly[team][gNum].name onclick="changeAt(this)")
-
+                                //input.btn(type='button' class=BibleClass value=weekly[team][gNum].bibleRead name='bibleRead' id=weekly[team][gNum].name onclick="changeAt(this)")
+                                
+                                div.form-group
+                                    input.form-control(type='number' name='0' )
                             li.col.py-1  
                                 -    let bibleMemorise= weekly[team][gNum].bibleMemorise? '암송완료!':'암송아직ㅜ';
                                 -    let MemoClass=weekly[team][gNum].bibleMemorise ? 'btn-blue':'btn-light';
