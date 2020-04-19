@@ -5,8 +5,8 @@ div.container-lg
             div.col-3.m-0.p-0
                 ul.p-0
                     li.tablehead 이름
-                    -for(let gNum=0;gNum<weekly[team].length; gNum++)
-                        li.tablehead #{weekly[team][gNum].name}
+                    -for(let gNum=0;gNum<weekly.length; gNum++)
+                        li.tablehead #{weekly[gNum].name}
                     li.py-1#newMem
                         input.btn.btn-outline-main(type='button' value='new member' onclick="newMember(this)")
             div.col-9#innerBox
@@ -32,8 +32,8 @@ div.container-lg
             div.col-3.m-0.p-0
                 ul.p-0 
                     li.tablehead 이름
-                    -for(let gNum=0;gNum<weekly[team].length; gNum++)
-                        li.tablehead #{weekly[team][gNum].name}
+                    -for(let gNum=0;gNum<weekly.length; gNum++)
+                        li.tablehead #{weekly[gNum].name}
                     li.py-1#newMem
                         input.btn.btn-outline-main(type='button' value='new member' onclick="newMember(this)")
             div.col-9#innerBox
@@ -50,42 +50,42 @@ div.container-lg
                         li.col.tablehead    
                             p 장결
 
-                    -for(let gNum=0;gNum<weekly[team].length; gNum++)
+                    -for(let gNum=0;gNum<weekly.length; gNum++)
                         ul.row
                             li.col.py-1  
                                 -
                                     let attendance='';
                                     let attendanceClass='';
-                                    if(weekly[team][gNum].attendance===1){
+                                    if(weekly[gNum].attendance===1){
                                         attendance='출석'
                                         attendanceClass='blue';
-                                    }else if(weekly[team][gNum].attendance===2){
+                                    }else if(weekly[gNum].attendance===2){
                                         attendance='지각'
                                         attendanceClass='yellow';
-                                    }else if(weekly[team][gNum].attendance===3){
+                                    }else if(weekly[gNum].attendance===3){
                                         attendance='결석'
                                         attendanceClass='red';
                                     }else{
                                         attendance='체크안함'
                                         attendanceClass='secondary';
                                     };
-                                input.btn(type='button' value=attendance name='attendance' class='btn-'+attendanceClass id=weekly[team][gNum].name onclick="changeAt(this)")
+                                input.btn(type='button' value=attendance name='attendance' class='btn-'+attendanceClass id=weekly[gNum].id onclick="changeAt(this)")
                             li.col.py-1.smaller
-                                -    let BibleClass=weekly[team][gNum].bibleRead*1 >0? 'btn-yellow':'btn-secondary';
-                                                                
-                                input.form-control(type='number' class=BibleClass min=0 value=weekly[team][gNum].bibleRead name='0' )
-                                input.btn(type='submit' value='입력' class=BibleClass  name='bibleRead' id=weekly[team][gNum].name onclick="changeAt(this)")
+                                -    let BibleClass=weekly[gNum].bibleRead*1 >0? 'btn-yellow':'btn-secondary';
+                                                      
+                                input.form-control(type='number' class=BibleClass min=0 value=weekly[gNum].bibleRead name='0' )
+                                input.btn(type='submit' value='입력' class=BibleClass  name='bibleRead' id=weekly[gNum].id onclick="changeAt(this)")
 
                             li.col.py-1  
-                                -    let bibleMemorise= weekly[team][gNum].bibleMemorise? '암송완료!':'암송아직ㅜ';
-                                -    let MemoClass=weekly[team][gNum].bibleMemorise ? 'btn-blue':'btn-light';
-                                input.btn(type='button' class=MemoClass value=bibleMemorise name='bibleMemorise' id=weekly[team][gNum].name onclick="changeAt(this)")
+                                -    let bibleMemorise= weekly[gNum].bibleMemorise? '암송완료!':'암송아직ㅜ';
+                                -    let MemoClass=weekly[gNum].bibleMemorise ? 'btn-blue':'btn-light';
+                                input.btn(type='button' class=MemoClass value=bibleMemorise name='bibleMemorise' id=weekly[gNum].id onclick="changeAt(this)")
                             li.col.py-1.smaller
-                                input.btn.btn-outline-main(type='button' value='...' id=weekly[team][gNum].name onclick="moreInfo(this)")
+                                input.btn.btn-outline-main(type='button' value='...' id=weekly[gNum].name onclick="moreInfo(this)")
                             li.col.py-1  
-                                -    let longAbsentee=weekly[team][gNum].longAbsentee ?'장기결석': '정상'
-                                -    let AbsenteeClass=weekly[team][gNum].longAbsentee ? 'btn-secondary':'btn-light'
-                                input.btn(type='button' class=AbsenteeClass value=longAbsentee name='longAbsentee' id=weekly[team][gNum].name onclick="changeAt(this)")
+                                -    let longAbsentee=weekly[gNum].longAbsentee ?'장기결석': '정상'
+                                -    let AbsenteeClass=weekly[gNum].longAbsentee ? 'btn-secondary':'btn-light'
+                                input.btn(type='button' class=AbsenteeClass value=longAbsentee name='longAbsentee' id=weekly[gNum].id onclick="changeAt(this)")
 
 
         

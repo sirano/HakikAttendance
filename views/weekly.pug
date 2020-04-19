@@ -14,8 +14,8 @@ div
                 button.btn.btn-sm.btn-light.dropdown-toggle(type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") 이전 주차 출석 입력하기
         div(class="dropdown-menu" )
             -for(let iNum=dirs.length-1;iNum>=0; iNum--)
-                -let dirname=dirs[iNum].substr(0,9)
-                a.dropdown-item(href='/thisweek?menu=attendance&team='+team+'&week='+dirname) #{dirname}
+                -let dirname=dirs[iNum]
+                a.dropdown-item(href='/thisweek?team='+team+'&week='+dirname) #{dirname}
 
 script.
     function changeAt(self){

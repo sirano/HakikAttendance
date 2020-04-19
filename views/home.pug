@@ -11,8 +11,8 @@
                     .card-body
                         //img.card-img-top(src="..." alt="...")
                         h5.card-title #{teams[iNum].teamName}
-                        p.card-text ###선생님
-                        a.btn.btn-default.btn-outline-secondary(href='/thisweek?team='+teams[iNum].teamName+'&week='+week) 바로가기
+                        p.card-text #{teams[iNum].teacher} 선생님
+                        a.btn.btn-default.btn-outline-secondary(href='/thisweek?team='+teams[iNum].id+'&week='+week) 바로가기
 
 
 .row.row-cols-1.row-cols-md-2.mx-1.my-4

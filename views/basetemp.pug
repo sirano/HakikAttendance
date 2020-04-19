@@ -29,7 +29,7 @@ html
                             a.nav-link.dropdown-toggle(href='#' id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") 이번주 출석
                             div.dropdown-menu(aria-labelledby="navbarDropdown")
                                 - for( let iNum=0;iNum<teams.length;iNum++)
-                                    a.dropdown-item(href='/thisweek?team='+teams[iNum].teamName+'&week='+week) #{teams[iNum].teamName}
+                                    a.dropdown-item(href='/thisweek?team='+teams[iNum].id+'&week='+week) #{teams[iNum].teamName}
                         li.nav-item
                             a.nav-link(href='/weekResult') 결과 보기
                         li.nav-item
