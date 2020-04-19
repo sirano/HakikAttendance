@@ -3,17 +3,13 @@ var fs = require('fs');
 var url= require('url'); //http, fs, url 모듈 사용 선언
 var qs = require('querystring');
 var express = require('express');
-var sf = require("sf"); //문자열 서식 관련. 참고 : https://jsdev.kr/t/js-string/747
 var mysql = require('mysql');
-var db=mysql.createConnection({
-    host:'localhost',
-    user:'ray',
-    password:'ph.dyhc0521',
-    database:'Members'
-})
-db.connect();
+let as=require('async');
+
 
 const cal=require('./lib/calculate.js');
+var db=require('./lib/db');
+var dbW=require('./lib/dbWorks');
 
 
 
@@ -23,6 +19,8 @@ app.locals.pretty=true;    //전송하는 코드를 '보기 이쁘게' 바뀌줌
 
 app.set('view engine','pug');  //템플릿 엔진으로 pug 사용
 app.set('views','./views')    // pug파일들은 ./views에 있다
+
+
 
 
 function makeNewWeekly(teams,weekNo, callbackFunc){
@@ -103,31 +101,36 @@ function calRank(result_count,teamList, callbackFunc){
 };
 
 app.get('/',(req,res)=>{
-    fs.readFile('data/members/teams.json','utf-8',(err,data)=>{
-        fs.readdir('data/weekly', (err, dirs) => {
-            let teams=JSON.parse(data);
-            
-            let _countWeek=cal.countWeek(Date())
-            let weekNo=sf("{year:0000}.{month:00}_{weekNo}",_countWeek); //날짜서식 정리
-            
-            console.log(weekNo);
-            console.log(dirs.indexOf(weekNo+'.json'));  //-1이면 없음, 나머지는 있음
-            if(dirs.indexOf(weekNo+'.json')===-1){ //dirs에 이번주 파일이 없다면?
+    let weekNo=cal.countWeek(Date()) //날짜서식 정리
+    
+    dbW.loadTeamList((teams)=>{    //teams = [team1,team2,team3, ... ]
+        console.log(teams); 
+        
+        db.query(`SELECT id,name FROM members`,(err,members)=>{
                 
-                makeNewWeekly(teams,weekNo, ()=>{
-                    res.writeHead(302, {Location:'/'});
-                    res.end();
+                dbW.checkEachMembers(weekNo,members, (err,inputValue)=>{
+                    if(inputValue===''){ //더이상 batabase에 추가할게 없을경우
+                        res.render('basetemp',{
+                            'loadPage': 'home',
+                            'week': weekNo, //자동으로 현재 주차 나오도록
+                            'teams':teams
+                        });
+                        
+                    }else{ //batabase에 추가할게 있을경우
+                        db.query("INSERT INTO weekly (week,mem_id) VALUES "+[inputValue], (err,result)=>{
+                            if(err) throw err;
+                            res.writeHead(302, {Location:'/'}); //home으로 리턴
+                            res.end();
+                        });
+                    };
                 });
-            }else{
-                res.render('basetemp',{
-                    'loadPage': 'home',
-                    'week': weekNo, //자동으로 현재 주차 나오도록
-                    'teams':teams
-                });
-            };
-            
         });
-    });
+        
+    
+    // SELECT members.id,name,longAbsentee,team_id,weekly.id,week, mem_id, attendance, bibleRead,bibleMemorise FROM members LEFT JOIN weekly ON members.id=weekly.mem_id;
+    // SELECT members.id,name,longAbsentee,team_id,weekly.id,week, mem_id FROM members LEFT JOIN weekly ON members.id=weekly.mem_id;
+    // DELETE FROM weekly WHERE week=202004.3;
+    });    
 });
 
 // /thisweek?menu=attendance&team=teamA

@@ -63,7 +63,7 @@ CREATE TABLE `teams` (
 INSERT INTO `teams` (teamName,teacher,photo) VALUES ('team1', 'teacher1','/img/1.jpg' );
 INSERT INTO `teams` (teamName,teacher,photo) VALUES ('team2', 'teacher2','/img/2.jpg' );
 INSERT INTO `teams` (teamName,teacher,photo) VALUES ('team3', 'teacher3','/img/3.jpg' );
-INSERT INTO `teams` (teamName,teacher,photo) VALUES ('team4', 'teacher4','/img/4.jpg' );
+INSERT INTO `teams` (teamName,teacher,photo) VALUES ('team5', 'teacher5','/img/5.jpg' );
 
 
 
