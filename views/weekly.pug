@@ -20,15 +20,15 @@ div
 script.
     function changeAt(self){
         let type=self.name;
-        let name=self.id;
+        let mem_id=self.id;
         let myTeam="#{team}";
         let _week="#{week}"
-        location.href=`/thisweek_process?type=${type}&team=${myTeam}&week=${_week}&name=${name}`;
+        location.href=`/thisweek_process?type=${type}&team=${myTeam}&week=${_week}&mem_id=${mem_id}`;
     };
     function moreInfo(self){
-        let name=self.id;
+        let mem_id=self.id;
         let _week="#{week}"
-        location.href=`/moreInfo?name=${name}&week=${_week}`
+        location.href=`/moreInfo?mem_id=${mem_id}&week=${_week}`
     };
     function newMember(self){
         let myTeam="#{team}";

@@ -10,21 +10,94 @@ div.container-lg
                     li.py-1#newMem
                         input.btn.btn-outline-main(type='button' value='new member' onclick="newMember(this)")
             div.col-9#innerBox
-                 div.form-group
-                    ul.row.tablehead
-                        li.col.tablehead  
-                            p.m-0 출석
-                        li.col.tablehead    
-                            p 성경
-                        li.col.tablehead    
-                            p 요절
-                        li.col.tablehead    
-                            p info
-                        li.col.tablehead    
-                            p 장결
-                    div.form-row
-                        div.col.py-1
-                            
+                div
+                    form(action="/weekly_process?team="+team+"&week="+week+"&mem_id="+mem_id, method="post")
+                        ul.row.tablehead
+                            li.col.tablehead  
+                                p.m-0 출석
+                            li.col.tablehead    
+                                p 성경
+                            li.col.tablehead    
+                                p 요절
+                            li.col.tablehead    
+                                p info
+                            li.col.tablehead    
+                                p 장결
+                        -for(let gNum=0;gNum<weekly.length; gNum++)
+                            div.form-row
+                                div.col.py-1
+                                    script.
+                                        function changeTEST(self){
+                                            console.log(self.value)
+                                            if(self.value==='출석'){
+                                                self.value='지각';
+                                                self.className='btn btn-yellow';
+                                            }else if(self.value==='지각'){
+                                                self.value='결석';
+                                                self.className='btn btn-red';
+                                            }else{ // 결석 또는 undefined
+                                                self.value='출석';
+                                                self.className='btn btn-blue';
+                                            }
+                                            console.log(self.value)
+                                        };
+                                    -
+                                        let attendance='';
+                                        let attendanceClass='';
+                                        if(weekly[gNum].attendance===1){
+                                            attendance='출석'
+                                            attendanceClass='blue';
+                                        }else if(weekly[gNum].attendance===2){
+                                            attendance='지각'
+                                            attendanceClass='yellow';
+                                        }else if(weekly[gNum].attendance===3){
+                                            attendance='결석'
+                                            attendanceClass='red';
+                                        }else{
+                                            attendance='체크안함'
+                                            attendanceClass='secondary';
+                                        };
+                                    //attendance
+                                    //클릭한다-> 색(=클래스), 이름, 값 바뀜
+                                    input.btn(type='button' value=attendance name='attendance' class='btn-'+attendanceClass id=weekly[gNum].mem_id onclick="changeTEST(this)")
+
+                                div.col.py-1.smaller
+                                    // read
+                                    
+                                    -    let BibleClass=weekly[gNum].bibleRead*1 >0? 'btn-yellow':'btn-secondary';
+
+                                    input.btn(type='number' class=BibleClass min=0 value=weekly[gNum].bibleRead name='bibleRead' id=weekly[gNum].mem_id  )
+
+                                div.col.py-1
+                                    //memo
+                                div.col.py-1
+                                    //info
+                                div.col.py-1
+                                    //longAbsentee
+                                
+                        //submit
+    script.
+        //흠 첫번째 버튼만 적용됨 ㅜㅜ어떡하지
+        let testMe = document.querySelector('input[name=bibleRead]');
+        testMe.addEventListener('change', (event) => {
+            console.log(testMe.value)
+            if(testMe.value>0){
+                testMe.className='btn btn-yellow';
+            }else{
+                testMe.className='btn btn-secondary';
+            }
+        });
+    
+    //
+        function changeTEST2(self){
+            console.log(self.value)
+            if(self.value>0){
+                self.className='btn btn-yellow';
+            }else{
+                self.className='btn btn-secondary';
+            }
+        }
+                             
                     
             
     div.weeklyButtons.m-1
@@ -69,23 +142,23 @@ div.container-lg
                                         attendance='체크안함'
                                         attendanceClass='secondary';
                                     };
-                                input.btn(type='button' value=attendance name='attendance' class='btn-'+attendanceClass id=weekly[gNum].id onclick="changeAt(this)")
+                                input.btn(type='button' value=attendance name='attendance' class='btn-'+attendanceClass id=weekly[gNum].mem_id onclick="changeAt(this)")
                             li.col.py-1.smaller
                                 -    let BibleClass=weekly[gNum].bibleRead*1 >0? 'btn-yellow':'btn-secondary';
                                                       
                                 input.form-control(type='number' class=BibleClass min=0 value=weekly[gNum].bibleRead name='0' )
-                                input.btn(type='submit' value='입력' class=BibleClass  name='bibleRead' id=weekly[gNum].id onclick="changeAt(this)")
+                                input.btn(type='submit' value='입력' class=BibleClass  name='bibleRead' id=weekly[gNum].mem_id onclick="changeAt(this)")
 
                             li.col.py-1  
                                 -    let bibleMemorise= weekly[gNum].bibleMemorise? '암송완료!':'암송아직ㅜ';
                                 -    let MemoClass=weekly[gNum].bibleMemorise ? 'btn-blue':'btn-light';
-                                input.btn(type='button' class=MemoClass value=bibleMemorise name='bibleMemorise' id=weekly[gNum].id onclick="changeAt(this)")
+                                input.btn(type='button' class=MemoClass value=bibleMemorise name='bibleMemorise' id=weekly[gNum].mem_id onclick="changeAt(this)")
                             li.col.py-1.smaller
-                                input.btn.btn-outline-main(type='button' value='...' id=weekly[gNum].name onclick="moreInfo(this)")
+                                input.btn.btn-outline-main(type='button' value='...' id=weekly[gNum].mem_id onclick="moreInfo(this)")
                             li.col.py-1  
                                 -    let longAbsentee=weekly[gNum].longAbsentee ?'장기결석': '정상'
                                 -    let AbsenteeClass=weekly[gNum].longAbsentee ? 'btn-secondary':'btn-light'
-                                input.btn(type='button' class=AbsenteeClass value=longAbsentee name='longAbsentee' id=weekly[gNum].id onclick="changeAt(this)")
+                                input.btn(type='button' class=AbsenteeClass value=longAbsentee name='longAbsentee' id=weekly[gNum].mem_id onclick="changeAt(this)")
 
 
         

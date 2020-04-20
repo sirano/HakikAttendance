@@ -19,6 +19,8 @@ app.set('views', './views'); // pug파일들은 ./views에 있다
 // SELECT members.id,name,longAbsentee,team_id,weekly.id,week, mem_id, attendance, bibleRead,bibleMemorise FROM members LEFT JOIN weekly ON members.id=weekly.mem_id;
 // SELECT members.id,name,longAbsentee,team_id,weekly.id,week, mem_id FROM members LEFT JOIN weekly ON members.id=weekly.mem_id;
 // DELETE FROM weekly WHERE week=202004.3;
+// SELECT name,mem_id,team_id,week,longAbsentee, attendance, bibleRead,bibleMemorise FROM members LEFT JOIN weekly ON members.id=weekly.mem_id
+// UPDATE weekly SET attendance=1 WHERE week=? and mem_id=?;
 
 // 분야별 등수 세우기
 // 총점수
@@ -101,9 +103,7 @@ app.get('/thisweek', function(req, res) {
     dbW.updateEachMembers(qweek); //데이터 업데이트
     
     db.query('SELECT id,teamName,teacher,photo FROM teams',(err,teams)=>{      
-        dbW.loadWeeksList('SELECT DISTINCT week FROM weekly','week',(weeks) => { //weeks = [ 202004.2, 202004.3, ... ]
-            console.log(weeks);
-            
+        dbW.loadWeeksList('SELECT DISTINCT week FROM weekly','week',(weeks) => { //weeks = [ 202004.2, 202004.3, ... ]            
             db.query(`SELECT name,mem_id,team_id,week,longAbsentee, attendance, bibleRead,bibleMemorise 
                     FROM members LEFT JOIN weekly ON members.id=weekly.mem_id
                     WHERE team_id=? and week=?`,[qteam,qweek],(err,weekly)=>{
@@ -115,7 +115,7 @@ app.get('/thisweek', function(req, res) {
                         teams: teams,         // 조별정보
                         weekly: weekly,       // 해당주, 우리팀 출석정보
                         dirs: weeks            // 이전 주차 리스트
-                    }); //temp 라는 템플릿파일 렌더링해서 전송. {} 안에 dict로 변수들 전송
+                    }); //temp 라는 템플릿파일 렌더링해서 전송. {} 안에 dit로 변수들 전송
             });
         });
     });
@@ -126,10 +126,9 @@ app.get('/thisweek_process', function(req, res) {
     var pathName = url.parse(_url, true).pathname;
     let queryData = url.parse(_url, true).query;
     let qType = queryData.type;
-    let qName = queryData.name;
+    let qMem_id = queryData.mem_id;
     let qTeam = queryData.team;
-    let qweek = queryData.week;
-    console.log(qTeam);
+    let qweek = queryData.week*1;
 
     if (qType === 'longAbsentee') {
         fs.readFile(`data/weekly/${qweek}.json`, 'utf-8', (err, dict) => {
@@ -174,30 +173,59 @@ app.get('/thisweek_process', function(req, res) {
             });
         });
     } else if (qType === 'attendance') {
-        fs.readFile(`data/weekly/${qweek}.json`, 'utf-8', (err, dict) => {
-            console.log(dict);
-            let Jdict = JSON.parse(dict);
-            let searchNum = -1;
-            let teamList = Jdict[qTeam]; //나중에 조별 수정할때 사용!
-            for (let i = 0; i < teamList.length; i++) {
-                //좀더 나은 정렬방법??
-                if (teamList[i].name === qName) {
-                    searchNum = i;
-                }
-            }
-            if (teamList[searchNum][qType] < 3) {
-                teamList[searchNum][qType]++;
-            } else {
+        
+        
+        
+        // let qType = queryData.type;
+        // let qMem_id = queryData.name;
+        // let qTeam = queryData.team;
+        // let qweek = queryData.week;
+        // UPDATE weekly SET attendance=1 WHERE week=? and mem_id=?;
+        db.query(`SELECT ${qType} FROM weekly WHERE week=? and mem_id=?`,
+                [qweek,qMem_id],
+                (err,attendance_before)=>{
+            if(err) throw err;
+            let attendance_after=0;
+            if(attendance_before[0][qType] < 3){
+                attendance_after=attendance_before[0][qType]+1;
+            }else{
                 //3또는 undefined
-                teamList[searchNum][qType] = 1;
+                attendance_after=1;
             }
-            console.log(Jdict);
-            let Jdict_string = JSON.stringify(Jdict);
-            fs.writeFile(`data/weekly/${qweek}.json`, Jdict_string, err => {
-                res.writeHead(302, { Location: '/thisweek?team=' + qTeam + '&week=' + qweek });
-                res.end();
+            db.query(`UPDATE weekly SET attendance=? WHERE week=? and mem_id=?;`,
+                    [attendance_after, qweek, qMem_id],
+                    (err,result)=>{
+                // console.log(qType+'of'+qweek+', id='+qMem_id+' is updated!');
             });
         });
+        
+        res.writeHead(302, { Location: '/thisweek?team=' + qTeam + '&week=' + qweek });
+        res.end();
+        
+        // fs.readFile(`data/weekly/${qweek}.json`, 'utf-8', (err, dict) => {
+        //     console.log(dict);
+        //     let Jdict = JSON.parse(dict);
+        //     let searchNum = -1;
+        //     let teamList = Jdict[qTeam]; //나중에 조별 수정할때 사용!
+        //     for (let i = 0; i < teamList.length; i++) {
+        //         //좀더 나은 정렬방법??
+        //         if (teamList[i].name === qName) {
+        //             searchNum = i;
+        //         }
+        //     }
+        //     if (teamList[searchNum][qType] < 3) {
+        //         teamList[searchNum][qType]++;
+        //     } else {
+        //         //3또는 undefined
+        //         teamList[searchNum][qType] = 1;
+        //     }
+        //     console.log(Jdict);
+        //     let Jdict_string = JSON.stringify(Jdict);
+        //     fs.writeFile(`data/weekly/${qweek}.json`, Jdict_string, err => {
+        //         res.writeHead(302, { Location: '/thisweek?team=' + qTeam + '&week=' + qweek });
+        //         res.end();
+        //     });
+        // });
     } else if (qType === 'bibleRead') {
         fs.readFile(`data/weekly/${qweek}.json`, 'utf-8', (err, dict) => {
             console.log(dict);
