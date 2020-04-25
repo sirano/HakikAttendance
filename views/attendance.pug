@@ -1,7 +1,9 @@
+
+
 div.container-lg
 
     div.weeklyButtons.m-1
-        form.row.m-1(action="/thisweek_process?#####", method="post")
+        div.row.m-1
             div.col-3.m-0.p-0
                 ul.p-0
                     li.tablehead 이름
@@ -11,7 +13,7 @@ div.container-lg
                         input.btn.btn-outline-main(type='button' value='new member' onclick="newMember(this)")
             div.col-9#innerBox
                 div
-                    form(action="/weekly_process?team="+team+"&week="+week+"&mem_id="+mem_id, method="post")
+                    form(action="/thisweek_process?team="+team+"&week="+week, method="post")
                         ul.row.tablehead
                             li.col.tablehead  
                                 p.m-0 출석
@@ -26,21 +28,6 @@ div.container-lg
                         -for(let gNum=0;gNum<weekly.length; gNum++)
                             div.form-row
                                 div.col.py-1
-                                    script.
-                                        function changeTEST(self){
-                                            console.log(self.value)
-                                            if(self.value==='출석'){
-                                                self.value='지각';
-                                                self.className='btn btn-yellow';
-                                            }else if(self.value==='지각'){
-                                                self.value='결석';
-                                                self.className='btn btn-red';
-                                            }else{ // 결석 또는 undefined
-                                                self.value='출석';
-                                                self.className='btn btn-blue';
-                                            }
-                                            console.log(self.value)
-                                        };
                                     -
                                         let attendance='';
                                         let attendanceClass='';
@@ -59,44 +46,48 @@ div.container-lg
                                         };
                                     //attendance
                                     //클릭한다-> 색(=클래스), 이름, 값 바뀜
-                                    input.btn(type='button' value=attendance name='attendance' class='btn-'+attendanceClass id=weekly[gNum].mem_id onclick="changeTEST(this)")
+                                    // https://okky.kr/article/431350 참고!!
+                                    input(type='hidden'  name='AT_'+weekly[gNum].mem_id ) 
+                                    input.btn(type='button' value=attendance  class='btn-'+attendanceClass  onclick="changeAt(this)" id=weekly[gNum].mem_id)
 
                                 div.col.py-1.smaller
                                     // read
-                                    
                                     -    let BibleClass=weekly[gNum].bibleRead*1 >0? 'btn-yellow':'btn-secondary';
 
-                                    input.btn(type='number' class=BibleClass min=0 value=weekly[gNum].bibleRead name='bibleRead' id=weekly[gNum].mem_id  )
-
+                                    input.btn(type='number' class=BibleClass min=0 value=weekly[gNum].bibleRead name='BR_'+weekly[gNum].mem_id id='bibleRead' )
                                 div.col.py-1
                                     //memo
-                                div.col.py-1
+                                    -    let bibleMemorise= weekly[gNum].bibleMemorise? '암송완료':'암송아직';
+                                    -    let MemoClass=weekly[gNum].bibleMemorise ? 'btn-blue':'btn-light';
+                                    input(type='hidden'  name='BM_'+weekly[gNum].mem_id ) 
+                                    input.btn(type='button' class=MemoClass value=bibleMemorise id=weekly[gNum].mem_id onclick="changeMemo(this)")
+
+                                div.col.py-1.smaller
                                     //info
+                                    input.btn.btn-outline-main(type='button' value='...' id=weekly[gNum].mem_id onclick="moreInfo(this)")
                                 div.col.py-1
                                     //longAbsentee
-                                
-                        //submit
-    script.
-        //흠 첫번째 버튼만 적용됨 ㅜㅜ어떡하지
-        let testMe = document.querySelector('input[name=bibleRead]');
-        testMe.addEventListener('change', (event) => {
-            console.log(testMe.value)
-            if(testMe.value>0){
-                testMe.className='btn btn-yellow';
-            }else{
-                testMe.className='btn btn-secondary';
-            }
-        });
-    
-    //
-        function changeTEST2(self){
-            console.log(self.value)
-            if(self.value>0){
-                self.className='btn btn-yellow';
-            }else{
-                self.className='btn btn-secondary';
-            }
-        }
+                                    -    let longAbsentee=weekly[gNum].longAbsentee ?'장기결석': '정상'
+                                    -    let AbsenteeClass=weekly[gNum].longAbsentee ? 'btn-secondary':'btn-light'
+                                    input.btn(type='button' class=AbsenteeClass value=longAbsentee name='longAbsentee' id=weekly[gNum].mem_id onclick="longAb(this)")                              
+                        
+                        div.form-row
+                            //submit
+                            div.col.py-1
+                                input.btn.btn-light(type='submit' value='저장')
+                        
+                        script.
+                            let target_bibleRead = document.querySelectorAll('div#innerBox #bibleRead');
+                            for(let i=0; i<target_bibleRead.length;i++){
+                                target_bibleRead[i].addEventListener('change', (event) => {
+                                    console.log(event.target)
+                                    changeRead(event.target);
+                                });
+                            };
+
+        
+        
+        
                              
                     
             

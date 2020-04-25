@@ -18,18 +18,65 @@ div
                 a.dropdown-item(href='/thisweek?team='+team+'&week='+dirname) #{dirname}
 
 script.
+        
     function changeAt(self){
+        let hidden=document.querySelector(`input[name=AT_${self.id}]`);
+        let hidden_value=0;
+        if(self.value==='출석'){
+            self.value='지각';
+            self.className='btn btn-yellow';
+            hidden_value=2;
+        }else if(self.value==='지각'){
+            self.value='결석';
+            self.className='btn btn-red';
+            hidden_value=3;
+        }else{ // 결석 또는 undefined
+            self.value='출석';
+            self.className='btn btn-blue';
+            hidden_value=1;
+        }
+        hidden.value=hidden_value;
+        console.log(hidden);
+    };
+
+    function changeRead(self){
+        if(self.value>0){
+            self.className='btn btn-yellow';
+        }else{
+            self.className='btn btn-secondary';
+        }
+    }
+
+    function changeMemo(self){
+        let hidden=document.querySelector(`input[name=BM_${self.id}]`);
+        let hidden_value=0;
+        if(self.value==='암송완료'){
+            self.value='암송아직';
+            self.className='btn btn-light';
+            hidden_value=0;
+        }else{ // 암송아직 또는 undefined
+            self.value='암송완료';
+            self.className='btn btn-blue';
+            hidden_value=1;
+        }
+        hidden.value=hidden_value;
+        console.log(hidden);
+    }
+    
+        function longAb(self){
         let type=self.name;
         let mem_id=self.id;
         let myTeam="#{team}";
         let _week="#{week}"
         location.href=`/thisweek_process?type=${type}&team=${myTeam}&week=${_week}&mem_id=${mem_id}`;
     };
+    
     function moreInfo(self){
         let mem_id=self.id;
         let _week="#{week}"
         location.href=`/moreInfo?mem_id=${mem_id}&week=${_week}`
     };
+    
     function newMember(self){
         let myTeam="#{team}";
         let _week="#{week}"
