@@ -16,6 +16,7 @@ app.locals.pretty = true; //전송하는 코드를 '보기 이쁘게' 바뀌줌
 app.set('view engine', 'pug'); //템플릿 엔진으로 pug 사용
 app.set('views', './views'); // pug파일들은 ./views에 있다
 
+
 // SELECT members.id,name,longAbsentee,team_id,weekly.id,week, mem_id, attendance, bibleRead,bibleMemorise FROM members LEFT JOIN weekly ON members.id=weekly.mem_id;
 // SELECT members.id,name,longAbsentee,team_id,weekly.id,week, mem_id FROM members LEFT JOIN weekly ON members.id=weekly.mem_id;
 // DELETE FROM weekly WHERE week=202004.3;
@@ -122,16 +123,9 @@ app.get('/thisweek', function(req, res) {
 });
 
 
-app.post('/thisweek_process', function(req, res) {
-    var _url = req.url;
-    var pathName = url.parse(_url, true).pathname;
-    let queryData = url.parse(_url, true).query;
-    //let qType = queryData.type;
-    //let qMem_id = queryData.mem_id;
-    let qTeam = queryData.team;
-    let qweek = queryData.week*1;
+
     
-    
+app.post('/weekly_callback',function(req,res){
     var body = '';
     req.on('data', function(data) {
         body += data;
@@ -140,70 +134,21 @@ app.post('/thisweek_process', function(req, res) {
         if (body.length > 1e6) req.connection.destroy();
     });
     req.on('end', function(data) {
-        //더이상 들어올 정보가 없을때 'end' 호출
-
         var post = qs.parse(body); //body json 형식으로 변환
         console.log(post);
-        let post_keys=Object.keys(post);
-        
-        for(let i=0; i<post_keys.length; i++){
-            // console.log(post_keys[i].substring(0,2));
-            // console.log(post_keys[i].substring(3));
-            // console.log(post[post_keys[i]]);
-            
-            
-            if(post_keys[i].substring(0,2)==='AT'){
-                db.query(`UPDATE weekly SET attendance=? WHERE week=? and mem_id=?;`,
-                    [ post[post_keys[i]] , qweek, post_keys[i].substring(3) ],
-                    (err,result)=>{});
-            }else if(post_keys[i].substring(0,2)==='BR'){
-                db.query(`UPDATE weekly SET bibleRead=? WHERE week=? and mem_id=?;`,
-                    [ post[post_keys[i]] , qweek, post_keys[i].substring(3) ],
-                    (err,result)=>{});
-            }else if(post_keys[i].substring(0,2)==='BM'){
-                db.query(`UPDATE weekly SET bibleMemorise=? WHERE week=? and mem_id=?;`,
-                    [ post[post_keys[i]] , qweek, post_keys[i].substring(3) ],
-                    (err,result,fields)=>{console.log(fields);});
-            }else{
-                console.log('attendance type error');
-                throw err;
-            }
-        }
-        res.writeHead(302, { Location: '/thisweek?team=' + qTeam + '&week=' + qweek });
-        res.end();
-
-        
-        ///////////////////////////////////////////////////////
-        ///여기 수정할차례        ///////////////////////////////
-        ///여기 수정할차례        ///////////////////////////////
-        ///여기 수정할차례   
-        /// **아무데이터도 안들어왔을때는 업데이트x 
-        /// 총 몇줄 수정했는지 알아내기///////////////////////////////
-        ///////////////////////////////////////////////////////
         
         
-//         db.query(`SELECT ${qType} FROM weekly WHERE week=? and mem_id=?`,
-//                 [qweek,qMem_id],
-//                 (err,attendance_before)=>{
-//             if(err) throw err;
-//             let attendance_after=0;
-//             if(attendance_before[0][qType] < 3){
-//                 attendance_after=attendance_before[0][qType]+1;
-//             }else{
-//                 //3또는 undefined
-//                 attendance_after=1;
-//             }
-//             db.query(`UPDATE weekly SET attendance=? WHERE week=? and mem_id=?;`,
-//                     [attendance_after, qweek, qMem_id],
-//                     (err,result)=>{
-//                 // console.log(qType+'of'+qweek+', id='+qMem_id+' is updated!');
-//             });
-//         });
-        
-        
+        db.query(`UPDATE weekly SET ${post.type}=? WHERE week=? and mem_id=?;`,
+            [post.value*1 , post.week*1, post.mem_id*1 ],
+            (err,result)=>{ 
+            if(err) console.log(err);
+            res.send(result); 
+        });
     });
+
+       
 });
-    
+
 app.get('/thisweek_process', function(req, res) {
     var _url = req.url;
     var pathName = url.parse(_url, true).pathname;

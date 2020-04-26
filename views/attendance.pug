@@ -10,7 +10,7 @@ div.container-lg
                     -for(let gNum=0;gNum<weekly.length; gNum++)
                         li.tablehead #{weekly[gNum].name}
                     li.py-1#newMem
-                        input.btn.btn-outline-main(type='button' value='new member' onclick="newMember(this)")
+                        input.btn.btn-outline-main(type='button' value='new member' onclick=`newMember(this,${team},${week})`)
             div.col-9#innerBox
                 div
                     form(action="/thisweek_process?team="+team+"&week="+week, method="post")
@@ -48,40 +48,35 @@ div.container-lg
                                     //클릭한다-> 색(=클래스), 이름, 값 바뀜
                                     // https://okky.kr/article/431350 참고!!
                                     input(type='hidden'  name='AT_'+weekly[gNum].mem_id ) 
-                                    input.btn(type='button' value=attendance  class='btn-'+attendanceClass  onclick="changeAt(this)" id=weekly[gNum].mem_id)
+                                    input.btn(type='button' value=attendance  name='attendance' class='btn-'+attendanceClass  onclick=`changeAt(this,${week})` id=weekly[gNum].mem_id)
 
                                 div.col.py-1.smaller
                                     // read
                                     -    let BibleClass=weekly[gNum].bibleRead*1 >0? 'btn-yellow':'btn-secondary';
 
-                                    input.btn(type='number' class=BibleClass min=0 value=weekly[gNum].bibleRead name='BR_'+weekly[gNum].mem_id id='bibleRead' )
+                                    input.btn.bibleRead(type='number' class=BibleClass min=0 value=weekly[gNum].bibleRead name='bibleRead' id=weekly[gNum].mem_id )
                                 div.col.py-1
                                     //memo
                                     -    let bibleMemorise= weekly[gNum].bibleMemorise? '암송완료':'암송아직';
                                     -    let MemoClass=weekly[gNum].bibleMemorise ? 'btn-blue':'btn-light';
                                     input(type='hidden'  name='BM_'+weekly[gNum].mem_id ) 
-                                    input.btn(type='button' class=MemoClass value=bibleMemorise id=weekly[gNum].mem_id onclick="changeMemo(this)")
+                                    input.btn(type='button' class=MemoClass value=bibleMemorise name='bibleMemorise' id=weekly[gNum].mem_id onclick=`changeMemo(this,${week})`)
 
                                 div.col.py-1.smaller
                                     //info
-                                    input.btn.btn-outline-main(type='button' value='...' id=weekly[gNum].mem_id onclick="moreInfo(this)")
+                                    input.btn.btn-outline-main(type='button' value='...' id=weekly[gNum].mem_id onclick=`moreInfo(this,${week})`)
                                 div.col.py-1
                                     //longAbsentee
                                     -    let longAbsentee=weekly[gNum].longAbsentee ?'장기결석': '정상'
                                     -    let AbsenteeClass=weekly[gNum].longAbsentee ? 'btn-secondary':'btn-light'
-                                    input.btn(type='button' class=AbsenteeClass value=longAbsentee name='longAbsentee' id=weekly[gNum].mem_id onclick="longAb(this)")                              
-                        
-                        div.form-row
-                            //submit
-                            div.col.py-1
-                                input.btn.btn-light(type='submit' value='저장')
+                                    input.btn(type='button' class=AbsenteeClass value=longAbsentee name='longAbsentee' id=weekly[gNum].mem_id onclick=`longAb(this,${team},${week})`)                              
                         
                         script.
-                            let target_bibleRead = document.querySelectorAll('div#innerBox #bibleRead');
+                            let target_bibleRead = document.querySelectorAll('div#innerBox .bibleRead');
                             for(let i=0; i<target_bibleRead.length;i++){
                                 target_bibleRead[i].addEventListener('change', (event) => {
                                     console.log(event.target)
-                                    changeRead(event.target);
+                                    changeRead(event.target, '#{week}');
                                 });
                             };
 
@@ -91,7 +86,7 @@ div.container-lg
                              
                     
             
-    div.weeklyButtons.m-1
+    //-div.weeklyButtons.m-1
         div.row.m-1
             div.col-3.m-0.p-0
                 ul.p-0 
