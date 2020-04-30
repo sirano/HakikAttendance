@@ -48,7 +48,7 @@ div.container-lg
                                     //클릭한다-> 색(=클래스), 이름, 값 바뀜
                                     // https://okky.kr/article/431350 참고!!
                                     input(type='hidden'  name='AT_'+weekly[gNum].mem_id ) 
-                                    input.btn(type='button' value=attendance  name='attendance' class='btn-'+attendanceClass  onclick=`changeAt(this,${week})` id=weekly[gNum].mem_id)
+                                    input.btn(type='button' value=attendance  name='attendance' class='btn-'+attendanceClass  onclick=`changeAt(this,${week}\)` id=weekly[gNum].mem_id )
 
                                 div.col.py-1.smaller
                                     // read
@@ -67,8 +67,8 @@ div.container-lg
                                     input.btn.btn-outline-main(type='button' value='...' id=weekly[gNum].mem_id onclick=`moreInfo(this,${week})`)
                                 div.col.py-1
                                     //longAbsentee
-                                    -    let longAbsentee=weekly[gNum].longAbsentee ?'장기결석': '정상'
-                                    -    let AbsenteeClass=weekly[gNum].longAbsentee ? 'btn-secondary':'btn-light'
+                                    -    let longAbsentee= weekly[gNum].longAbsentee ? '장기결석':'정상' ;
+                                    -    let AbsenteeClass= weekly[gNum].longAbsentee ? 'btn-secondary':'btn-light';
                                     input.btn(type='button' class=AbsenteeClass value=longAbsentee name='longAbsentee' id=weekly[gNum].mem_id onclick=`longAb(this,${team},${week})`)                              
                         
                         script.
@@ -79,10 +79,34 @@ div.container-lg
                                     changeRead(event.target, '#{week}');
                                 });
                             };
-
+    script
+        include script/weekly.js
         
-        
-        
+    form.m-1.my-4
+        div.row
+            div.col-4
+                label 추가점수
+            div.col-7
+                label 사유
+            div.col-1
+        -for(let i=0;i<adPoints.length; i++)
+            div.row(id=adPoints[i].id)
+                div.col-4
+                    label.mx-3 #{adPoints[i].point}
+                div.col-7
+                    label.mx-3 #{adPoints[i].reason}
+                div.col-1
+                    button.close.mx-3(type='button' onclick='adPoints_del(this)')
+                        span(aria-hidden="true") &times;
+        div.form-row
+            div.form-group.col-4
+                input.form-control(type='number' min=0)
+                small.form-text.text-muted 추가점수를 입력하세요
+            div.form-group.col-8
+                input.form-control(type='text')
+                small.form-text.text-muted 추가점수 사유를 입력하세요(50자이내)
+        input.btn.btn-primary(type='button' value='추가점수 입력'  onclick=`adPoints_create(this,${week},${team})`)
+        small.text-muted.mx-2 입력 후 새로고침하면 추가점수 입력이 완료됩니다
                              
                     
             

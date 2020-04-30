@@ -1,6 +1,11 @@
 -- 치팅시트 : http://www.incodom.kr/DB_-_%EB%8D%B0%EC%9D%B4%ED%84%B0_%ED%83%80%EC%9E%85/MYSQL
 -- 자료형 : https://devhints.io/mysql
 
+--
+-- 테이블에 한글입력이 안될때!!!
+--
+ALTER TABLE (tableName) convert to charset utf8;
+
 ----
 -- Table structure for table `members`
 ----
@@ -125,3 +130,22 @@ CREATE TABLE `weekly` (
 
 INSERT INTO `weekly` (week,mem_id) VALUES (140412.1, 1 );
 
+
+----
+-- Table structure for table `weekly`
+----
+
+CREATE TABLE `adPoints` (
+    
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `week` float(7,1) NOT NULL, -- 년도년도월월.1 , ex : 202004.2 
+    `team_id` int(11) NOT NULL ,
+    `point` int(11) NOT NULL ,
+    `reason` varchar(100) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+--
+-- Dumping data for table `weekly`
+--
+INSERT INTO `adPoints` (week,team_id,point,reason) VALUES (,,,);

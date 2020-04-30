@@ -4,7 +4,7 @@ div
             h3.display-4 result
         default
             h3.display-4 #{team}
-    span(style='font-size:2rem;') #{week.substr(0,4)}년 #{week.substr(5,2)}월  #{week.substr(8)}주
+    span(style='font-size:2rem;') #{week.substr(0,4)}년 #{week.substr(4,2)}월  #{week.substr(7)}주
 
     div.dropdown#selectWeek
         case mainDiv 
@@ -16,8 +16,7 @@ div
             -for(let iNum=dirs.length-1;iNum>=0; iNum--)
                 -let dirname=dirs[iNum]
                 a.dropdown-item(href='/thisweek?team='+team+'&week='+dirname) #{dirname}
-script
-    include script/weekly.js
+
 
 
 case mainDiv 

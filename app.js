@@ -103,11 +103,19 @@ app.get('/thisweek', function(req, res) {
     
     dbW.updateEachMembers(qweek); //데이터 업데이트
     
+    //select * from weekly WHERE mem_id=1 ORDER BY week DESC LIMIT 6;
+    
     db.query('SELECT id,teamName,teacher,photo FROM teams',(err,teams)=>{      
         dbW.loadWeeksList('SELECT DISTINCT week FROM weekly','week',(weeks) => { //weeks = [ 202004.2, 202004.3, ... ]            
             db.query(`SELECT name,mem_id,team_id,week,longAbsentee, attendance, bibleRead,bibleMemorise 
                     FROM members LEFT JOIN weekly ON members.id=weekly.mem_id
-                    WHERE team_id=? and week=?`,[qteam,qweek],(err,weekly)=>{
+                    WHERE team_id=? and week=?`,[qteam,qweek],(err,weekly)=>{ //해당주,우리팀 출석정보
+                
+                db.query(`SELECT * FROM adPoints WHERE team_id=? and week=?`,
+                         [qteam,qweek],(err,adPoints)=>{
+                    
+                    console.log(adPoints);
+                    
                     res.render('basetemp', {
                         loadPage: 'weekly',
                         mainDiv: queryData.menu,
@@ -115,8 +123,10 @@ app.get('/thisweek', function(req, res) {
                         week: queryData.week, // 필수 query
                         teams: teams,         // 조별정보
                         weekly: weekly,       // 해당주, 우리팀 출석정보
-                        dirs: weeks            // 이전 주차 리스트
+                        dirs: weeks,            // 이전 주차 리스트
+                        adPoints: adPoints    //추가점수(해당주,우리팀)
                     }); //temp 라는 템플릿파일 렌더링해서 전송. {} 안에 dit로 변수들 전송
+                });   
             });
         });
     });
@@ -149,156 +159,58 @@ app.post('/weekly_callback',function(req,res){
        
 });
 
-app.get('/thisweek_process', function(req, res) {
-    var _url = req.url;
-    var pathName = url.parse(_url, true).pathname;
-    let queryData = url.parse(_url, true).query;
-    let qType = queryData.type;
-    let qMem_id = queryData.mem_id;
-    let qTeam = queryData.team;
-    let qweek = queryData.week*1;
-
-    if (qType === 'longAbsentee') {
-        fs.readFile(`data/weekly/${qweek}.json`, 'utf-8', (err, dict) => {
-            fs.readFile(`data/members/members.json`, 'utf-8', (err, dict2) => {
-                let Jdict = JSON.parse(dict);
-                let searchNum_week = -1;
-                let teamList = Jdict[qTeam];
-                for (let i = 0; i < teamList.length; i++) {
-                    //좀더 나은 정렬방법??
-                    if (teamList[i].name === qName) {
-                        searchNum_week = i;
-                    }
-                } //여기까지 qWeek.json 파일처리
-
-                let Jmembers = JSON.parse(dict2);
-                let searchNum_mem = -1;
-                for (let i = 0; i < Jmembers.length; i++) {
-                    if (Jmembers[i].name === qName) {
-                        searchNum_mem = i;
-                    }
-                } //여기까지 members.json 파일처리
-                console.log(searchNum_week, searchNum_mem);
-
-                if (teamList[searchNum_week][qType]) {
-                    teamList[searchNum_week][qType] = false;
-                    Jmembers[searchNum_mem][qType] = false;
-                } else {
-                    teamList[searchNum_week][qType] = true;
-                    Jmembers[searchNum_mem][qType] = true;
-                }
-                console.log(teamList[searchNum_week][qType], Jmembers[searchNum_mem][qType]);
-                let Jdict_string = JSON.stringify(Jdict);
-                let Jmembers_string = JSON.stringify(Jmembers);
-                fs.writeFile(`data/weekly/${qweek}.json`, Jdict_string, err => {
-                    fs.writeFile('data/members/members.json', Jmembers_string, err => {
-                        res.writeHead(302, {
-                            Location: '/thisweek?team=' + qTeam + '&week=' + qweek
-                        });
-                        res.end();
-                    });
-                });
+app.post('/longAb_callback',function(req,res){
+    var body = '';
+    req.on('data', function(data) {
+        body += data;
+        // Too much POST data, kill the connection!
+        // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+        if (body.length > 1e6) req.connection.destroy();
+    });
+    req.on('end', function(data) {
+        var post = qs.parse(body); //body json 형식으로 변환
+        console.log(post);
+        //members->장기결석 1
+        //weekly 이번주 출석3 성경0 암송0;
+        db.query(`UPDATE members SET longAbsentee=?  WHERE id=?`,
+                 [post.value*1, post.mem_id*1],(err,result1)=>{ 
+            db.query(`UPDATE weekly SET attendance=0, bibleRead=0, bibleMemorise=0 WHERE week=? and mem_id=?;`,
+                [ post.week*1, post.mem_id*1 ],
+                (err,result2)=>{ 
+                if(err) console.log(err);
+                res.send([result1, result2]); 
             });
         });
-    } else if(qType === 'attendance') {
-        
-        
-        
-        // let qType = queryData.type;
-        // let qMem_id = queryData.name;
-        // let qTeam = queryData.team;
-        // let qweek = queryData.week;
-        // UPDATE weekly SET attendance=1 WHERE week=? and mem_id=?;
-        db.query(`SELECT ${qType} FROM weekly WHERE week=? and mem_id=?`,
-                [qweek,qMem_id],
-                (err,attendance_before)=>{
-            if(err) throw err;
-            let attendance_after=0;
-            if(attendance_before[0][qType] < 3){
-                attendance_after=attendance_before[0][qType]+1;
-            }else{
-                //3또는 undefined
-                attendance_after=1;
-            }
-            db.query(`UPDATE weekly SET attendance=? WHERE week=? and mem_id=?;`,
-                    [attendance_after, qweek, qMem_id],
-                    (err,result)=>{
-                // console.log(qType+'of'+qweek+', id='+qMem_id+' is updated!');
-            });
-        });
-        
-        res.writeHead(302, { Location: '/thisweek?team=' + qTeam + '&week=' + qweek });
-        res.end();
-        
-        // fs.readFile(`data/weekly/${qweek}.json`, 'utf-8', (err, dict) => {
-        //     console.log(dict);
-        //     let Jdict = JSON.parse(dict);
-        //     let searchNum = -1;
-        //     let teamList = Jdict[qTeam]; //나중에 조별 수정할때 사용!
-        //     for (let i = 0; i < teamList.length; i++) {
-        //         //좀더 나은 정렬방법??
-        //         if (teamList[i].name === qName) {
-        //             searchNum = i;
-        //         }
-        //     }
-        //     if (teamList[searchNum][qType] < 3) {
-        //         teamList[searchNum][qType]++;
-        //     } else {
-        //         //3또는 undefined
-        //         teamList[searchNum][qType] = 1;
-        //     }
-        //     console.log(Jdict);
-        //     let Jdict_string = JSON.stringify(Jdict);
-        //     fs.writeFile(`data/weekly/${qweek}.json`, Jdict_string, err => {
-        //         res.writeHead(302, { Location: '/thisweek?team=' + qTeam + '&week=' + qweek });
-        //         res.end();
-        //     });
-        // });
-    } else if (qType === 'bibleRead') {
-        fs.readFile(`data/weekly/${qweek}.json`, 'utf-8', (err, dict) => {
-            console.log(dict);
-            let Jdict = JSON.parse(dict);
-            let searchNum = -1;
-            let teamList = Jdict[qTeam]; //나중에 조별 수정할때 사용!
-            for (let i = 0; i < teamList.length; i++) {
-                //좀더 나은 정렬방법??
-                if (teamList[i].name === qName) {
-                    searchNum = i;
-                }
-            }
-            teamList[searchNum][qType]++;
-            console.log(Jdict);
-            let Jdict_string = JSON.stringify(Jdict);
-            fs.writeFile(`data/weekly/${qweek}.json`, Jdict_string, err => {
-                res.writeHead(302, { Location: '/thisweek?team=' + qTeam + '&week=' + qweek });
-                res.end();
-            });
-        });
-    } else if (qType === 'bibleMemorise') {
-        fs.readFile(`data/weekly/${qweek}.json`, 'utf-8', (err, dict) => {
-            console.log(dict);
-            let Jdict = JSON.parse(dict);
-            let searchNum = -1;
-            let teamList = Jdict[qTeam]; //나중에 조별 수정할때 사용!
-            for (let i = 0; i < teamList.length; i++) {
-                //좀더 나은 정렬방법??
-                if (teamList[i].name === qName) {
-                    searchNum = i;
-                }
-            }
-            teamList[searchNum][qType] = teamList[searchNum][qType] ? false : true;
-            console.log(Jdict);
-            let Jdict_string = JSON.stringify(Jdict);
-            fs.writeFile(`data/weekly/${qweek}.json`, Jdict_string, err => {
-                res.writeHead(302, { Location: '/thisweek?team=' + qTeam + '&week=' + qweek });
-                res.end();
-            });
-        });
-    } else {
-        res.writeHead(200);
-        res.end('error');
-    }
+    });
 });
+
+app.post('/adPoints_callback',function(req,res){
+    var body = '';
+    req.on('data', function(data) {
+        body += data;
+        // Too much POST data, kill the connection!
+        // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+        if (body.length > 1e6) req.connection.destroy();
+    });
+    req.on('end', function(data) {
+        var post = qs.parse(body); //body json 형식으로 변환
+        console.log(post);
+        
+        if(post.type==='create'){
+            db.query(`INSERT INTO adPoints (week,team_id,point,reason) VALUES (?,?,?,?);` ,
+                     [ post.week*1,post.team_id*1,post.point*1, post.reason ] , (err,result)=>{
+                if(err) console.log(err);
+                res.send(result); 
+            });
+        }else if(post.type==='delete'){
+            db.query(`DELETE FROM adPoints WHERE id=?`, [post.adPoints_id*1] , (err,result)=>{
+                if(err) console.log(err);
+                res.send(result); 
+            });
+        }else console.log('post.type error');
+    });
+});
+
 
 app.get('/newMember', (req, res) => {
     var _url = req.url;
