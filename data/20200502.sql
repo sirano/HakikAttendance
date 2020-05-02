@@ -1,0 +1,212 @@
+-- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
+--
+-- Host: localhost    Database: Members
+-- ------------------------------------------------------
+-- Server version	5.7.29-0ubuntu0.18.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `SI_link`
+--
+
+DROP TABLE IF EXISTS `SI_link`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `SI_link` (
+  `mem_id` int(11) NOT NULL,
+  `SI_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `SI_link`
+--
+
+LOCK TABLES `SI_link` WRITE;
+/*!40000 ALTER TABLE `SI_link` DISABLE KEYS */;
+INSERT INTO `SI_link` VALUES (1,1);
+/*!40000 ALTER TABLE `SI_link` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `adPoints`
+--
+
+DROP TABLE IF EXISTS `adPoints`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `adPoints` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `week` float(7,1) NOT NULL,
+  `team_id` int(11) NOT NULL,
+  `point` int(11) NOT NULL,
+  `reason` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `adPoints`
+--
+
+LOCK TABLES `adPoints` WRITE;
+/*!40000 ALTER TABLE `adPoints` DISABLE KEYS */;
+INSERT INTO `adPoints` VALUES (1,202004.1,1,2,'for test'),(2,202004.4,2,2,'테스트'),(12,202004.5,2,10,'전도점수');
+/*!40000 ALTER TABLE `adPoints` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `members`
+--
+
+DROP TABLE IF EXISTS `members`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `members` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(10) NOT NULL,
+  `phoneNumber` varchar(15) DEFAULT NULL,
+  `home` mediumtext,
+  `birthday` varchar(15) DEFAULT NULL,
+  `longAbsentee` tinyint(1) DEFAULT '0',
+  `team_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `members`
+--
+
+LOCK TABLES `members` WRITE;
+/*!40000 ALTER TABLE `members` DISABLE KEYS */;
+INSERT INTO `members` VALUES (1,'member1',NULL,NULL,NULL,0,1),(2,'member2',NULL,NULL,NULL,0,1),(3,'member3',NULL,NULL,NULL,0,1),(4,'member4',NULL,NULL,NULL,0,1),(5,'member5',NULL,NULL,NULL,0,2),(6,'member6',NULL,NULL,NULL,0,2),(7,'member7',NULL,NULL,NULL,1,2),(8,'member8',NULL,NULL,NULL,1,2),(9,'member9',NULL,NULL,NULL,1,3),(10,'member10',NULL,NULL,NULL,0,3),(11,'member11',NULL,NULL,NULL,0,3),(12,'member12',NULL,NULL,NULL,0,3),(13,'member13',NULL,NULL,NULL,1,4),(14,'member14',NULL,NULL,NULL,0,4),(15,'member15',NULL,NULL,NULL,0,4),(16,'member16',NULL,NULL,NULL,0,4),(17,'member17',NULL,NULL,NULL,0,5);
+/*!40000 ALTER TABLE `members` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mytest`
+--
+
+DROP TABLE IF EXISTS `mytest`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mytest` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `week` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mytest`
+--
+
+LOCK TABLES `mytest` WRITE;
+/*!40000 ALTER TABLE `mytest` DISABLE KEYS */;
+INSERT INTO `mytest` VALUES (2,'2020.04_3'),(3,'2020.04_4'),(4,'2020.04_5'),(5,'2020.04_6'),(6,'2020.05_1'),(7,'2020.05_2');
+/*!40000 ALTER TABLE `mytest` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `specialInfos`
+--
+
+DROP TABLE IF EXISTS `specialInfos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `specialInfos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `title` varchar(30) NOT NULL,
+  `description` mediumtext,
+  `author` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `specialInfos`
+--
+
+LOCK TABLES `specialInfos` WRITE;
+/*!40000 ALTER TABLE `specialInfos` DISABLE KEYS */;
+INSERT INTO `specialInfos` VALUES (1,'2020-04-17 09:36:36','TEST LOG',NULL,NULL);
+/*!40000 ALTER TABLE `specialInfos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `teams`
+--
+
+DROP TABLE IF EXISTS `teams`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `teams` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `teamName` varchar(10) NOT NULL,
+  `teacher` varchar(10) NOT NULL,
+  `photo` mediumtext,
+  `teamInfo` mediumtext,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `teams`
+--
+
+LOCK TABLES `teams` WRITE;
+/*!40000 ALTER TABLE `teams` DISABLE KEYS */;
+INSERT INTO `teams` VALUES (1,'team1','teacher1','/img/1.jpg',NULL),(2,'team2','teacher2','/img/2.jpg',NULL),(3,'team3','teacher3','/img/3.jpg',NULL),(4,'team4','teacher4','/img/4.jpg',NULL),(5,'team5','teacher5','/img/5.jpg',NULL);
+/*!40000 ALTER TABLE `teams` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `weekly`
+--
+
+DROP TABLE IF EXISTS `weekly`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `weekly` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `week` float(7,1) NOT NULL,
+  `mem_id` int(11) NOT NULL,
+  `attendance` tinyint(1) DEFAULT '0',
+  `bibleRead` tinyint(3) DEFAULT '0',
+  `bibleMemorise` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=411 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `weekly`
+--
+
+LOCK TABLES `weekly` WRITE;
+/*!40000 ALTER TABLE `weekly` DISABLE KEYS */;
+INSERT INTO `weekly` VALUES (1,140412.1,1,0,0,0),(2,140412.2,1,0,0,0),(122,202001.1,1,0,0,0),(123,202001.1,2,0,0,0),(124,202001.1,3,0,0,0),(125,202001.1,4,0,0,0),(126,202001.1,5,0,0,0),(127,202001.1,6,0,0,0),(128,202001.1,7,0,0,0),(129,202001.1,8,0,0,0),(130,202001.1,9,0,0,0),(131,202001.1,10,0,0,0),(132,202001.1,11,0,0,0),(133,202001.1,12,0,0,0),(134,202001.1,13,0,0,0),(135,202001.1,14,0,0,0),(136,202001.1,15,0,0,0),(137,202001.1,16,0,0,0),(138,202001.1,17,0,0,0),(139,202001.2,1,0,0,0),(140,202001.2,2,0,0,0),(141,202001.2,3,0,0,0),(142,202001.2,4,0,0,0),(143,202001.2,5,0,0,0),(144,202001.2,6,0,0,0),(145,202001.2,7,0,0,0),(146,202001.2,8,0,0,0),(147,202001.2,9,0,0,0),(148,202001.2,10,0,0,0),(149,202001.2,11,0,0,0),(150,202001.2,12,0,0,0),(151,202001.2,13,0,0,0),(152,202001.2,14,0,0,0),(153,202001.2,15,0,0,0),(154,202001.2,16,0,0,0),(155,202001.2,17,0,0,0),(156,202001.3,1,0,0,0),(157,202001.3,2,0,0,0),(158,202001.3,3,0,0,0),(159,202001.3,4,0,0,0),(160,202001.3,5,0,0,0),(161,202001.3,6,0,0,0),(162,202001.3,7,0,0,0),(163,202001.3,8,0,0,0),(164,202001.3,9,0,0,0),(165,202001.3,10,0,0,0),(166,202001.3,11,0,0,0),(167,202001.3,12,0,0,0),(168,202001.3,13,0,0,0),(169,202001.3,14,0,0,0),(170,202001.3,15,0,0,0),(171,202001.3,16,0,0,0),(172,202001.3,17,0,0,0),(173,202001.4,1,0,0,0),(174,202001.4,2,0,0,0),(175,202001.4,3,0,0,0),(176,202001.4,4,0,0,0),(177,202001.4,5,0,0,0),(178,202001.4,6,0,0,0),(179,202001.4,7,0,0,0),(180,202001.4,8,0,0,0),(181,202001.4,9,0,0,0),(182,202001.4,10,0,0,0),(183,202001.4,11,0,0,0),(184,202001.4,12,0,0,0),(185,202001.4,13,0,0,0),(186,202001.4,14,0,0,0),(187,202001.4,15,0,0,0),(188,202001.4,16,0,0,0),(189,202001.4,17,0,0,0),(190,202002.1,1,0,0,0),(191,202002.1,2,0,0,0),(192,202002.1,3,0,0,0),(193,202002.1,4,0,0,0),(194,202002.1,5,0,0,0),(195,202002.1,6,0,0,0),(196,202002.1,7,0,0,0),(197,202002.1,8,0,0,0),(198,202002.1,9,1,0,0),(199,202002.1,10,1,2,0),(200,202002.1,11,1,0,0),(201,202002.1,12,1,0,0),(202,202002.1,13,0,0,0),(203,202002.1,14,0,0,0),(204,202002.1,15,0,0,0),(205,202002.1,16,0,0,0),(206,202002.1,17,0,0,0),(207,202002.2,1,1,3,0),(208,202002.2,2,0,0,0),(209,202002.2,3,0,0,0),(210,202002.2,4,0,0,0),(211,202002.2,5,0,0,0),(212,202002.2,6,0,0,0),(213,202002.2,7,0,0,0),(214,202002.2,8,0,0,0),(215,202002.2,9,0,0,0),(216,202002.2,10,0,0,0),(217,202002.2,11,0,0,0),(218,202002.2,12,0,0,0),(219,202002.2,13,0,0,0),(220,202002.2,14,0,0,0),(221,202002.2,15,0,0,0),(222,202002.2,16,0,0,0),(223,202002.2,17,0,0,0),(224,202002.3,1,0,0,0),(225,202002.3,2,0,0,0),(226,202002.3,3,0,0,0),(227,202002.3,4,0,0,0),(228,202002.3,5,0,0,0),(229,202002.3,6,0,0,0),(230,202002.3,7,0,0,0),(231,202002.3,8,0,0,0),(232,202002.3,9,0,0,0),(233,202002.3,10,0,0,0),(234,202002.3,11,0,0,0),(235,202002.3,12,0,0,0),(236,202002.3,13,0,0,0),(237,202002.3,14,0,0,0),(238,202002.3,15,0,0,0),(239,202002.3,16,0,0,0),(240,202002.3,17,2,0,1),(241,202002.4,1,0,0,0),(242,202002.4,2,0,0,0),(243,202002.4,3,0,0,0),(244,202002.4,4,0,0,0),(245,202002.4,5,0,0,0),(246,202002.4,6,0,0,0),(247,202002.4,7,0,0,0),(248,202002.4,8,0,0,0),(249,202002.4,9,0,0,0),(250,202002.4,10,0,0,0),(251,202002.4,11,0,0,0),(252,202002.4,12,0,0,0),(253,202002.4,13,0,0,0),(254,202002.4,14,0,0,0),(255,202002.4,15,0,0,0),(256,202002.4,16,0,0,0),(257,202002.4,17,0,0,0),(258,202003.1,1,0,0,0),(259,202003.1,2,0,0,0),(260,202003.1,3,0,0,0),(261,202003.1,4,0,0,0),(262,202003.1,5,0,0,0),(263,202003.1,6,0,0,0),(264,202003.1,7,0,0,0),(265,202003.1,8,0,0,0),(266,202003.1,9,0,0,0),(267,202003.1,10,0,0,0),(268,202003.1,11,0,0,0),(269,202003.1,12,0,0,0),(270,202003.1,13,0,0,0),(271,202003.1,14,0,0,0),(272,202003.1,15,0,0,0),(273,202003.1,16,0,0,0),(274,202003.1,17,0,0,0),(275,202003.2,1,0,0,0),(276,202003.2,2,0,0,0),(277,202003.2,3,0,0,0),(278,202003.2,4,0,0,0),(279,202003.2,5,0,0,0),(280,202003.2,6,0,0,0),(281,202003.2,7,0,0,0),(282,202003.2,8,0,0,0),(283,202003.2,9,0,0,0),(284,202003.2,10,0,0,0),(285,202003.2,11,0,0,0),(286,202003.2,12,0,0,0),(287,202003.2,13,0,0,0),(288,202003.2,14,0,0,0),(289,202003.2,15,0,0,0),(290,202003.2,16,0,0,0),(291,202003.2,17,0,0,0),(292,202003.3,1,0,0,0),(293,202003.3,2,0,0,0),(294,202003.3,3,0,0,0),(295,202003.3,4,0,0,0),(296,202003.3,5,0,0,0),(297,202003.3,6,0,0,0),(298,202003.3,7,0,0,0),(299,202003.3,8,0,0,0),(300,202003.3,9,0,0,0),(301,202003.3,10,0,0,0),(302,202003.3,11,0,0,0),(303,202003.3,12,0,0,0),(304,202003.3,13,0,0,0),(305,202003.3,14,0,0,0),(306,202003.3,15,0,0,0),(307,202003.3,16,0,0,0),(308,202003.3,17,0,0,0),(309,202003.4,1,0,0,0),(310,202003.4,2,0,0,0),(311,202003.4,3,0,0,0),(312,202003.4,4,0,0,0),(313,202003.4,5,3,0,0),(314,202003.4,6,0,0,0),(315,202003.4,7,0,0,0),(316,202003.4,8,0,0,0),(317,202003.4,9,0,0,0),(318,202003.4,10,0,0,0),(319,202003.4,11,0,0,0),(320,202003.4,12,0,0,0),(321,202003.4,13,0,0,0),(322,202003.4,14,0,0,0),(323,202003.4,15,0,0,0),(324,202003.4,16,0,0,0),(325,202003.4,17,0,0,0),(326,202004.1,1,0,0,0),(327,202004.1,2,0,0,0),(328,202004.1,3,0,0,0),(329,202004.1,4,0,0,0),(330,202004.1,5,3,0,0),(331,202004.1,6,0,0,0),(332,202004.1,7,0,0,0),(333,202004.1,8,0,0,0),(334,202004.1,9,0,0,0),(335,202004.1,10,0,0,0),(336,202004.1,11,0,0,0),(337,202004.1,12,0,0,0),(338,202004.1,13,0,0,0),(339,202004.1,14,0,0,0),(340,202004.1,15,0,0,0),(341,202004.1,16,0,0,0),(342,202004.1,17,0,0,0),(343,202004.2,1,0,0,0),(344,202004.2,2,0,0,0),(345,202004.2,3,0,0,0),(346,202004.2,4,0,0,0),(347,202004.2,5,1,0,0),(348,202004.2,6,0,0,0),(349,202004.2,7,0,0,0),(350,202004.2,8,0,0,0),(351,202004.2,9,0,0,0),(352,202004.2,10,0,0,0),(353,202004.2,11,0,0,0),(354,202004.2,12,0,0,0),(355,202004.2,13,0,0,0),(356,202004.2,14,0,0,0),(357,202004.2,15,0,0,0),(358,202004.2,16,0,0,0),(359,202004.2,17,0,0,0),(360,202004.3,1,0,0,0),(361,202004.3,2,0,0,0),(362,202004.3,3,0,0,0),(363,202004.3,4,0,0,0),(364,202004.3,5,3,0,0),(365,202004.3,6,1,0,0),(366,202004.3,7,0,0,0),(367,202004.3,8,0,0,0),(368,202004.3,9,0,0,0),(369,202004.3,10,0,0,0),(370,202004.3,11,0,0,0),(371,202004.3,12,2,0,0),(372,202004.3,13,0,0,0),(373,202004.3,14,0,0,0),(374,202004.3,15,0,0,0),(375,202004.3,16,0,0,0),(376,202004.3,17,0,0,0),(377,202004.4,1,0,0,0),(378,202004.4,2,0,0,0),(379,202004.4,3,0,0,0),(380,202004.4,4,0,0,0),(381,202004.4,5,3,0,0),(382,202004.4,6,0,0,0),(383,202004.4,7,0,0,0),(384,202004.4,8,0,0,0),(385,202004.4,9,3,1,0),(386,202004.4,10,2,1,0),(387,202004.4,11,1,2,0),(388,202004.4,12,1,0,0),(389,202004.4,13,0,0,0),(390,202004.4,14,0,0,0),(391,202004.4,15,0,0,0),(392,202004.4,16,0,0,0),(393,202004.4,17,2,5,1),(394,202004.5,1,1,4,1),(395,202004.5,2,1,0,1),(396,202004.5,3,1,0,1),(397,202004.5,4,1,4,1),(398,202004.5,5,2,4,1),(399,202004.5,6,2,0,1),(400,202004.5,7,1,4,0),(401,202004.5,8,0,0,0),(402,202004.5,9,0,0,0),(403,202004.5,10,1,2,1),(404,202004.5,11,2,3,1),(405,202004.5,12,3,0,0),(406,202004.5,13,0,0,0),(407,202004.5,14,1,1,0),(408,202004.5,15,1,0,1),(409,202004.5,16,1,0,1),(410,202004.5,17,2,2,1);
+/*!40000 ALTER TABLE `weekly` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2020-05-02  8:01:17

@@ -285,6 +285,74 @@ app.post('/newMember_process', (req, res) => {
 });
 
 app.get('/weekResult', (req, res) => {
+    var _url = req.url;
+    let queryData = url.parse(_url, true).query;
+    let qweek = queryData.week*1;
+    
+    res.writeHead(200);
+    res.end('result');
+    
+    dbW.updateEachMembers(qweek); //데이터 업데이트
+    
+    db.query('SELECT id,teamName,teacher,photo FROM teams',(err,teams)=>{      
+        dbW.loadWeeksList('SELECT DISTINCT week FROM weekly','week',(weeks) => { //weeks = [ 202004.2, 202004.3, ... ]
+            let i=0;
+            let resultData=[]
+            
+            db.query(`SELECT
+                        team_id,week,
+                        COUNT(if(longAbsentee=0,1,null))count_except_lonAb, 
+                        (COUNT(if(attendance=1,1,null))*10+COUNT(if(attendance=2,1,null))*5+COUNT(if(attendance=1 OR attendance=2,null,1))*(-2))/COUNT(if(longAbsentee=0,1,null))atPoint,
+                        SUM(bibleRead)/COUNT(if(longAbsentee=0,1,null))readPoint,
+                        SUM(bibleMemorise)/COUNT(if(longAbsentee=0,1,null))memoPoint
+                        FROM members LEFT JOIN weekly ON members.id=weekly.mem_id 
+                        WHERE week=? GROUP BY team_id;`,
+                     [qweek],(err,resultData)=>{
+                console.log(resultData)
+            });
+            
+            
+            
+            
+            
+            // as.whilst(
+            //     //조건
+            //     function test(callback){ callback(null, i<teams.length)},
+
+            //     //실행문
+            //     function memCheck (callback){
+            //         let team_id=teams[i].id;
+            //         db.query(`SELECT
+            //                     team_id,week,
+            //                     COUNT(if(longAbsentee=0,1,null))count_except_lonAb, 
+            //                     (COUNT(if(attendance=1,1,null))*10+COUNT(if(attendance=2,1,null))*5+COUNT(if(attendance=1 OR attendance=2,null,1))*(-2))/COUNT(if(longAbsentee=0,1,null))atPoint,
+            //                     SUM(bibleRead)/COUNT(if(longAbsentee=0,1,null))readPoint,
+            //                     SUM(bibleMemorise)/COUNT(if(longAbsentee=0,1,null))memoPoint
+            //                     FROM members LEFT JOIN weekly ON members.id=weekly.mem_id WHERE week=? and team_id=?;`,
+            //                  [qweek,team_id],(err,result)=>{
+            //             resultData.push(result[0]);
+            //             i++;
+            //             callback (err,resultData);
+            //         });
+            //     },
+
+            //     //결과. 여기서 계속
+            //     (err,resultData) => {
+            //         console.log(resultData);
+            //         console.log('++++');
+            //         console.log(resultData.sort(function(a,b){
+            //             return b.atPoint-a.atPoint
+            //         }))
+                    
+            //     }
+            // );
+            
+        });
+    });
+    
+});
+    
+app.get('/#', (req, res) => {
     fs.readFile('data/members/teams.json', 'utf-8', (err, data) => {
         let teams = JSON.parse(data);
 
