@@ -276,6 +276,7 @@ https://github.com/twbs/bootstrap
 
 .weeklyButtons #innerBox > div{
     width:768px;
+    text-align:center;
 }
 
 .weeklyButtons #innerBox .row{
@@ -311,6 +312,10 @@ https://github.com/twbs/bootstrap
     height: 40px;
 }
 
+.weeklyButtons .smaller .btn{
+    width: 60px;
+} 
+/*
 .weeklyButtons .smaller .form-control{
     display: inline-block;
     vertical-align:middle;
@@ -331,6 +336,7 @@ https://github.com/twbs/bootstrap
     margin-left: -9px;
     margin-top:0.5px;
 } 
+*/
 
 #newMem{
     border-bottom: 0 !important;
