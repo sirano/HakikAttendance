@@ -17,6 +17,8 @@ app.set('view engine', 'pug'); //템플릿 엔진으로 pug 사용
 app.set('views', './views'); // pug파일들은 ./views에 있다
 
 
+
+
 // SELECT members.id,name,longAbsentee,team_id,weekly.id,week, mem_id, attendance, bibleRead,bibleMemorise FROM members LEFT JOIN weekly ON members.id=weekly.mem_id;
 // SELECT members.id,name,longAbsentee,team_id,weekly.id,week, mem_id FROM members LEFT JOIN weekly ON members.id=weekly.mem_id;
 // DELETE FROM weekly WHERE week=202004.3;
@@ -289,67 +291,52 @@ app.get('/weekResult', (req, res) => {
     let queryData = url.parse(_url, true).query;
     let qweek = queryData.week*1;
     
-    res.writeHead(200);
-    res.end('result');
-    
     dbW.updateEachMembers(qweek); //데이터 업데이트
     
     db.query('SELECT id,teamName,teacher,photo FROM teams',(err,teams)=>{      
         dbW.loadWeeksList('SELECT DISTINCT week FROM weekly','week',(weeks) => { //weeks = [ 202004.2, 202004.3, ... ]
-            let i=0;
-            let resultData=[]
+
             
             db.query(`SELECT
+                        G1.team_id, G1.week, count_except_lonAb, atPoint, readPoint, memoPoint, 
+                        adPoints.point as adPoint
+                        FROM (
+                        SELECT
                         team_id,week,
                         COUNT(if(longAbsentee=0,1,null))count_except_lonAb, 
                         (COUNT(if(attendance=1,1,null))*10+COUNT(if(attendance=2,1,null))*5+COUNT(if(attendance=1 OR attendance=2,null,1))*(-2))/COUNT(if(longAbsentee=0,1,null))atPoint,
                         SUM(bibleRead)/COUNT(if(longAbsentee=0,1,null))readPoint,
                         SUM(bibleMemorise)/COUNT(if(longAbsentee=0,1,null))memoPoint
-                        FROM members LEFT JOIN weekly ON members.id=weekly.mem_id 
-                        WHERE week=? GROUP BY team_id;`,
+                        FROM members LEFT JOIN weekly ON members.id=weekly.mem_id WHERE week=? 
+                        GROUP BY team_id
+                        )G1 
+                        LEFT JOIN adPoints ON G1.team_id=adPoints.team_id and G1.week=adPoints.week`,
                      [qweek],(err,resultData)=>{
-                console.log(resultData)
-            });
-            
-            
-            
-            
-            
-            // as.whilst(
-            //     //조건
-            //     function test(callback){ callback(null, i<teams.length)},
-
-            //     //실행문
-            //     function memCheck (callback){
-            //         let team_id=teams[i].id;
-            //         db.query(`SELECT
-            //                     team_id,week,
-            //                     COUNT(if(longAbsentee=0,1,null))count_except_lonAb, 
-            //                     (COUNT(if(attendance=1,1,null))*10+COUNT(if(attendance=2,1,null))*5+COUNT(if(attendance=1 OR attendance=2,null,1))*(-2))/COUNT(if(longAbsentee=0,1,null))atPoint,
-            //                     SUM(bibleRead)/COUNT(if(longAbsentee=0,1,null))readPoint,
-            //                     SUM(bibleMemorise)/COUNT(if(longAbsentee=0,1,null))memoPoint
-            //                     FROM members LEFT JOIN weekly ON members.id=weekly.mem_id WHERE week=? and team_id=?;`,
-            //                  [qweek,team_id],(err,result)=>{
-            //             resultData.push(result[0]);
-            //             i++;
-            //             callback (err,resultData);
-            //         });
-            //     },
-
-            //     //결과. 여기서 계속
-            //     (err,resultData) => {
-            //         console.log(resultData);
-            //         console.log('++++');
-            //         console.log(resultData.sort(function(a,b){
-            //             return b.atPoint-a.atPoint
-            //         }))
-                    
-            //     }
-            // );
-            
+                
+                resultData = cal.rankByPoint(resultData,'atPoint', 'atRank');
+                resultData = cal.rankByPoint(resultData,'readPoint', 'readRank');
+                resultData = cal.rankByPoint(resultData,'memoPoint', 'memoRank');
+                
+                resultData = cal.totalRank(resultData)
+                
+                resultData.sort(function (a,b){
+                    return a.team_id - b.team_id
+                });
+                
+                
+                console.table(resultData);
+                res.render('basetemp', {
+                    loadPage: 'weekly',
+                    mainDiv: 'result',
+                    week: queryData.week, // 필수 query
+                    teams: teams,         // 조별정보
+                    result: resultData,       // 해당주, 우리팀 출석정보
+                    dirs: weeks,            // 이전 주차 리스트
+                }); //temp 라는 템플릿파일 렌더링해서 전송. {} 안에 dit로 변수들 전송
+                
+            });            
         });
     });
-    
 });
     
 app.get('/#', (req, res) => {

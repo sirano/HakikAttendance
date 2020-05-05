@@ -22,7 +22,12 @@
     "dependencies": {
         "async": "^3.2.0",
         "express": "^4.17.1",
+        "fs": "0.0.1-security",
+        "http": "0.0.1-security",
         "mysql": "^2.18.1",
-        "socket.io": "^2.3.0"
+        "pug": "^2.0.4",
+        "qs": "^6.9.4",
+        "sf": "^0.2.0",
+        "url": "^0.11.0"
     }
 }

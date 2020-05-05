@@ -1,10 +1,51 @@
 div
     table.table.table-hover.table-custom.mx-3
         tr
-            th(scope='col') 조
-            th(scope='col') 총점
+            th(scope='col' rowspan='2' ) 조
+            th(scope='col' colspan='2' ) 출석점수
+            th(scope='col' colspan='2' ) 성경점수
+            th(scope='col' colspan='2' ) 요절점수
+            th(scope='col' rowspan='2' ) 추가점수
+            th(scope='col' rowspan='2' ) 총점
+            th(scope='col' rowspan='2' ) 최종순위
+        
+        tr
+            th(scope='col') 점수
             th(scope='col') 순위
-        -for( let iNum=0;iNum<teams.length;iNum++)
+            th(scope='col') 점수
+            th(scope='col') 순위
+            th(scope='col') 점수
+            th(scope='col') 순위
+        -for(let iNum=0; iNum<result.length ; iNum++)
+        
+            case result[iNum].totalRank
+                when 1
+                    tr.table-first
+
+                        th(scope='row')= teams[iNum].teamName
+                        td= result[iNum].atPoint
+                        td= result[iNum].atRank
+                        td= result[iNum].readPoint
+                        td= result[iNum].readRank
+                        td= result[iNum].memoPoint
+                        td= result[iNum].memoRank
+                        td= result[iNum].adPoint
+                        td= result[iNum].totalPoint
+                        td= result[iNum].totalRank
+                default
+                    tr
+
+                        th(scope='row')= teams[iNum].teamName
+                        td= result[iNum].atPoint
+                        td= result[iNum].atRank
+                        td= result[iNum].readPoint
+                        td= result[iNum].readRank
+                        td= result[iNum].memoPoint
+                        td= result[iNum].memoRank
+                        td= result[iNum].adPoint
+                        td= result[iNum].totalPoint
+                        td= result[iNum].totalRank
+        //-for( let iNum=0;iNum<teams.length;iNum++)
                 
             case rank.final[iNum]
                 when 1
@@ -17,7 +58,7 @@ div
                         th(scope='row')= teams[iNum]
                         td= totalPoint[iNum]
                         td= rank.final[iNum]
-        tr
+        //tr
             td
             td
             td#newMem
