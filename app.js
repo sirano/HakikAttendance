@@ -16,69 +16,13 @@ app.locals.pretty = true; //전송하는 코드를 '보기 이쁘게' 바뀌줌
 app.set('view engine', 'pug'); //템플릿 엔진으로 pug 사용
 app.set('views', './views'); // pug파일들은 ./views에 있다
 
-
-
-
 // SELECT members.id,name,longAbsentee,team_id,weekly.id,week, mem_id, attendance, bibleRead,bibleMemorise FROM members LEFT JOIN weekly ON members.id=weekly.mem_id;
 // SELECT members.id,name,longAbsentee,team_id,weekly.id,week, mem_id FROM members LEFT JOIN weekly ON members.id=weekly.mem_id;
 // DELETE FROM weekly WHERE week=202004.3;
 // SELECT name,mem_id,team_id,week,longAbsentee, attendance, bibleRead,bibleMemorise FROM members LEFT JOIN weekly ON members.id=weekly.mem_id
 // UPDATE weekly SET attendance=1 WHERE week=? and mem_id=?;
 
-// 분야별 등수 세우기
-// 총점수
-// 총등수
-function calRank(result_count, teamList, callbackFunc) {
-    let atPoint = [];
-    let readPoint = [];
-    let memoPoint = [];
-    let totalPoint = [];
-    let rule = { 1: 5, 2: 4, 3: 3, 4: 2, 5: 1 };
-
-    for (let i = 0; i < teamList.length; i++) {
-        let initPoint = 0;
-        initPoint += result_count[teamList[i]].attendance * 10;
-        initPoint += result_count[teamList[i]].tardy * 5;
-        initPoint +=
-            (result_count[teamList[i]].total -
-                result_count[teamList[i]].longAbsentee -
-                result_count[teamList[i]].attendance) *
-            -2;
-        initPoint /= result_count[teamList[i]].total - result_count[teamList[i]].longAbsentee;
-        atPoint.push(initPoint);
-
-        initPoint = 0;
-        initPoint += result_count[teamList[i]].bibleRead;
-        initPoint /= result_count[teamList[i]].attendance + result_count[teamList[i]].tardy;
-        readPoint.push(initPoint);
-
-        initPoint = 0;
-        initPoint += result_count[teamList[i]].bibleMemorise;
-        initPoint /= result_count[teamList[i]].attendance + result_count[teamList[i]].tardy;
-        memoPoint.push(initPoint);
-    }
-    console.log(atPoint, readPoint, memoPoint);
-
-    function getRanks(arr) {
-        var sorted = arr.slice().sort(function(a, b) {
-            return b - a;
-        });
-        return arr.slice().map(function(v) {
-            return sorted.indexOf(v) + 1;
-        });
-    }
-    let rank = {};
-    rank.at = getRanks(atPoint);
-    rank.read = getRanks(readPoint);
-    rank.memo = getRanks(memoPoint);
-    console.log(rank);
-    for (let i = 0; i < teamList.length; i++) {
-        totalPoint.push(rule[rank.at[i]] * 2 + rule[rank.read[i]] + rule[rank.memo[i]]);
-    }
-    console.log(totalPoint);
-    rank.final = getRanks(totalPoint);
-    callbackFunc(rank, totalPoint);
-}
+app.use(express.static('views')); //img 등 데이터 불러오기 위함
 
 app.get('/', (req, res) => {
     let weekNo = cal.countWeek(Date()); //날짜서식 정리
@@ -219,13 +163,16 @@ app.get('/newMember', (req, res) => {
     let queryData = url.parse(_url, true).query;
     let qTeam = queryData.team;
     let qweek = queryData.week;
-    let teamsBeforeParse = fs.readFileSync('data/members/teams.json', 'utf-8'); //조 이름, 조별 정보 불러오기
-    let teams = JSON.parse(teamsBeforeParse);
-    res.render('basetemp', {
-        loadPage: 'newMember',
-        teams: teams, //조별정보
-        team: qTeam,
-        week: qweek
+    
+    db.query('SELECT id,teamName,teacher,photo FROM teams',(err,teams)=>{
+    
+        console.table(teams);
+        res.render('basetemp', {
+            loadPage: 'newMember',
+            teams: teams, //조별정보
+            team: qTeam,
+            week: qweek
+        });
     });
 });
 
@@ -339,68 +286,64 @@ app.get('/weekResult', (req, res) => {
     });
 });
     
-app.get('/#', (req, res) => {
-    fs.readFile('data/members/teams.json', 'utf-8', (err, data) => {
-        let teams = JSON.parse(data);
 
-        let _countWeek = cal.countWeek(Date());
-        let weekNo = sf('{year:0000}.{month:00}_{weekNo}', _countWeek); //날짜서식 정리
-        let weekly_data = fs.readFileSync(`data/weekly/${weekNo}.json`, 'utf-8');
-        let weekly = JSON.parse(weekly_data);
 
-        let dirs = fs.readdirSync('data/weekly');
 
-        //initial 세팅하기
-        let teamList = [];
-        let result_count = {};
-        let initialResult = {
-            total: 0,
-            attendance: 0,
-            tardy: 0,
-            longAbsentee: 0,
-            bibleRead: 0,
-            bibleMemorise: 0
-        };
-        //결과 집계하기
-        for (let i = 0; i < teams.length; i++) {
-            teamList.push(teams[i].teamName);
-            result_count[teamList[i]] = JSON.parse(JSON.stringify(initialResult));
-        }
-        for (let i = 0; i < teamList.length; i++) {
-            let teamMems = weekly[teamList[i]];
-            result_count[teamList[i]].total = teamMems.length;
-            for (let j = 0; j < teamMems.length; j++) {
-                if (teamMems[j].attendance === 1) {
-                    result_count[teamList[i]].attendance += 1;
-                } else if (teamMems[j].attendance === 2) {
-                    result_count[teamList[i]].tardy += 1;
-                }
-                if (teamMems[j].longAbsentee) {
-                    result_count[teamList[i]].longAbsentee += 1;
-                }
-                result_count[teamList[i]].bibleRead += teamMems[j].bibleRead;
-                if (teamMems[j].bibleMemorise) {
-                    result_count[teamList[i]].bibleMemorise += 1;
-                }
-            }
-        }
-        console.log(result_count);
+app.get('/personal', (req,res)=>{
+    var _url = req.url;
+    var pathName = url.parse(_url, true).pathname;
+    let queryData = url.parse(_url, true).query;
+    let mem_id = queryData.mem_id;
+    let qweek = queryData.week*1;
+    
+    db.query('SELECT id,teamName,teacher,photo FROM teams',(err,teams)=>{
+        db.query(`SELECT members.id AS id, name, phoneNumber, home, birthday, longAbsentee, team_id, teamName 
+                FROM members LEFT JOIN teams ON members.team_id=teams.id 
+                WHERE members.id=?`, [mem_id],(err,prof)=>{
+            db.query(`SELECT id, CONCAT(left(week,4),"년 ",substring(week,5,2),"월 ",right(week,1),"주")week,
+                    mem_id, attendance, bibleRead, bibleMemorise 
+                    FROM weekly WHERE mem_id=1 and week>200000;` , [mem_id],(err,aten)=>{
+                db.query(`SELECT mem_id,DATE_FORMAT(created,"%Y년%c월%d일") AS created,title,description,author 
+                        FROM specialInfos LEFT JOIN SI_link ON SI_link.SI_id=specialInfos.id 
+                        WHERE mem_id=?` , [mem_id],(err,info)=>{
+                    
+                    
+                    //임시 값 지정
+                    prof[0].birthday='1998.05.21';
+                    prof[0].home = '인천 연수구';
+                    prof[0].phoneNumber = '010-4133-6335'
+                    
+                    res.render('basetemp', {
+                        loadPage: 'personal',
+                        week: queryData.week, //자동으로 현재 주차 나오도록
+                        teams: teams,
+                        profile : prof,
+                        attendance : aten,
+                        specialInfo : info
+                    });
+                });
+            });
+        });      
+    });
+});
 
-        calRank(result_count, teamList, (rank, totalPoint) => {
-            console.log(rank);
-            console.log;
+app.get('/students', (req,res)=>{
+    let weekNo = cal.countWeek(Date()); //날짜서식 정리
+    db.query('SELECT id,teamName,teacher,photo FROM teams',(err,teams)=>{
+        db.query(`SELECT members.id AS id, name, phoneNumber, home, birthday, longAbsentee, team_id, teamName 
+                FROM members LEFT JOIN teams ON members.team_id=teams.id`,
+                (err,prof)=>{
+        
             res.render('basetemp', {
-                loadPage: 'weekly',
-                mainDiv: 'result',
-                teams: teamList,
-                rank: rank,
-                totalPoint: totalPoint,
-                week: weekNo, //필수 query
-                dirs: dirs
+                loadPage: 'students',
+                week: weekNo, //자동으로 현재 주차 나오도록
+                teams: teams,
+                profile : prof
             });
         });
     });
 });
+
 
 app.listen(3000, function() {
     console.log('Conneted 3000 port!');

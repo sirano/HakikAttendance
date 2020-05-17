@@ -1,0 +1,74 @@
+div#profile.row.w-75.mx-auto
+    table.table.col-8
+        tr
+            td.font-weight-bold 이름
+            td= profile[0].name
+                case profile[0].longAbsentee
+                    when 0
+                        span
+                    when 1
+                        span.badge.badge-danger.mx-3 장기결석
+        tr
+            td.font-weight-bold 생일
+            td= profile[0].birthday
+        tr
+            td.font-weight-bold 전화번호
+            td= profile[0].phoneNumber
+        tr
+            td.font-weight-bold 주소
+            td= profile[0].home
+        tr
+            td.font-weight-bold 조
+            td= profile[0].teamName
+    div.col-1
+    div.col-3.my-auto
+        div.photo
+            case profile[0].photo
+                when undefined
+                    img(src="/img_mem/defaultImg.jpg" alt="프로필 이미지")
+                default
+                    img(src="/img_mem"+profile[0].photo alt="프로필 이미지")
+
+   
+            
+
+div#personal
+    div#personal-at.m-4
+        h4 출석내역
+        table.table
+            tr.thead-light
+                th  날짜
+                th  출석
+                th  성경(장)
+            -for(let i=attendance.length-1 ; i>=0 ; i--)
+                tr
+                    td #{attendance[i].week}
+                    case attendance[i].attendance
+                        when 1
+                            td(style='background-color: #6f9dad96;') 출석
+                        when 2
+                            td 지각
+                        when 3
+                            td 결석
+                        default
+                            td 체크안함
+                    td= attendance[i].bibleRead
+
+    div#personal-specialInfo.m-4
+        h4 특이사항
+        table.table
+            tr.thead-light
+                th  날짜
+                th  제목
+                th  내용
+            -for(let i=specialInfo.length-1 ; i>=0 ; i--)
+                tr
+                    td= specialInfo[i].created
+                    td= specialInfo[i].title
+                    case specialInfo[i].description
+                        when null
+                            td 
+                        when undefined
+                            td 
+                        default
+                            td= specialInfo[i].description.substring(0,10) + '...'

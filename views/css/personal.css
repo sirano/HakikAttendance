@@ -1,0 +1,29 @@
+#profile {
+}
+
+#profile .table {
+    width : 250px
+}
+
+@media (min-width: 992px) {
+    div#personal {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    div#personal > div {
+        width: 45%;
+    }
+}
+
+.photo {
+    margin-left: auto;
+    border-radius: 30%;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+}
+
+.photo img {
+    width: inherit;
+}

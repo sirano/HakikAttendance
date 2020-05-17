@@ -1,0 +1,22 @@
+script(src="https://kit.fontawesome.com/c1fdac9bfe.js" crossorigin="anonymous")
+h3.display-4.mt-3 학생 관리
+div.m-5
+    table.table
+        tr.thead-light
+            th  #
+            th 이름
+            th  조
+            th 
+        -for(let i=0;i<profile.length; i++)
+            tr
+                td= i+1
+                td: a(href='/personal?mem_id='+profile[i].id+'&week='+week)= profile[i].name
+                    case profile[i].longAbsentee
+                        when 0
+                            i.fas.fa-search.fa-sm.mx-3
+                        when 1
+                            i.fas.fa-search.fa-sm.mx-3
+                            span.badge.badge-danger.mx-1 장기결석
+                td= profile[i].teamName
+                td: button.btn.p-0
+                    i.fas.fa-pen.fa-2x

@@ -8,7 +8,8 @@ div.container-lg
                 ul.p-0
                     li.tablehead 이름
                     -for(let gNum=0;gNum<weekly.length; gNum++)
-                        li.tablehead #{weekly[gNum].name}
+                        li.tablehead
+                            a(href='/personal?mem_id='+weekly[gNum].mem_id+'&week='+week) #{weekly[gNum].name}
                     li.py-1#newMem
                         input.btn.btn-outline-main(type='button' value='new member' onclick=`newMember(this,${team},${week})`)
             div.col-9#innerBox

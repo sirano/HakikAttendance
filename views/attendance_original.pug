@@ -17,7 +17,8 @@ div.container-lg
                 ul.p-0 
                     li.tablehead 이름
                     -for(let gNum=0;gNum<weekly[team].length; gNum++)
-                        li.tablehead #{weekly[team][gNum].name}
+                        li.tablehead 
+                            span#{weekly[team][gNum].name}
                     li.py-1#newMem
                         input.btn.btn-outline-main(type='button' value='new member' onclick="newMember(this)")
             div.col-9#innerBox
