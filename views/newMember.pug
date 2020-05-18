@@ -16,19 +16,22 @@ div.m-5
             div.form-row
                 div.col
                 div.col-3
-                    select.custom-select
+                    select(name='bir_y').custom-select
                         -for(let i=2020;i>1980;i--)
-                            option= i
+                            if i===2000
+                                option(selected)= i
+                            else 
+                                option= i
                 span 년
                 div.col
                 div.col-3
-                    select.custom-select
+                    select(name='bir_m').custom-select
                         -for(let i=1;i<13;i++)
                             option= i
                 span 월
                 div.col
                 div.col-3
-                    select.custom-select
+                    select(name='bir_d').custom-select
                         -for(let i=1;i<31;i++)
                             option= i
                 span 일
@@ -36,7 +39,13 @@ div.m-5
         div.form-group.row
             div.col-sm-6
                 label.col-form-label 조
-                input.form-control(type='text' name='team' value=team required)
+                select(name='team' required).custom-select
+                    -for(let i=0;i<teams.length;i++)
+                        if teams[i].id===team*1
+                            option(value=teams[i].id selected)= teams[i].teamName
+                        else
+                            option(value=teams[i].id)= teams[i].teamName
+            
             div.col-sm-6
                 label.col-form-label 등록일
                 input.form-control(type='text' name='joinDate' value=week)

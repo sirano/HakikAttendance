@@ -165,12 +165,12 @@ app.get('/newMember', (req, res) => {
     let qweek = queryData.week;
     
     db.query('SELECT id,teamName,teacher,photo FROM teams',(err,teams)=>{
-    
-        console.table(teams);
+        let teamName = teams.find(element => element.id===qTeam*1); //team_id = qTeam인 항목 찾아내기
         res.render('basetemp', {
             loadPage: 'newMember',
             teams: teams, //조별정보
             team: qTeam,
+            teamName : teamName.teamName,
             week: qweek
         });
     });
@@ -192,44 +192,20 @@ app.post('/newMember_process', (req, res) => {
         let qTeam = queryData.team; //url정보 가져오기
 
         var post = qs.parse(body); //body json 형식으로 변환
-        console.log(qweek);
-        let Nname = post.name;
-        let initDic = {
-            name: '',
-            phoneNumber: '',
-            home: '',
-            brithday: '',
-            team: '',
-            joinDate: '',
-            longAbsentee: false,
-            specialInfo: ''
-        };
-        initDic.name = post.name;
-        initDic.phoneNumber = post.phoneNumber;
-        initDic.birthday = sf(
-            '{0:0000}.{1:00}.{2:00}',
-            post.year * 1,
-            post.month * 1,
-            post.date * 1
-        );
-        initDic.home = post.home;
-        initDic.team = post.team;
-        initDic.joinDate = post.joinDate;
-        initDic.specialInfo = post.specialInfo;
-        console.log(initDic);
-        fs.readFile(`data/members/members.json`, 'utf-8', (err, data) => {
-            let Jmembers = JSON.parse(data);
-            Jmembers.push(initDic);
-            let Jmembers_string = JSON.stringify(Jmembers);
-            fs.writeFile(`data/members/members.json`, Jmembers_string, err => {
-                //
-                //여기다가.. 데이터수정을 해야해
-                //
-                //
-                res.writeHead(302, { Location: '/thisweek?team=' + qTeam + '&week=' + qweek });
-                res.end();
-            });
-        });
+        
+        
+        let birthday = post.bir_y + '년 '+ post.bir_m + '월 ' + post.bir_d + '일';
+        let joined = post.joinDate.substr(0,4) + '년 '+ post.joinDate.substr(4,2) + '월 '+ post.joinDate.substr(7) + '주차';
+        db.query(`INSERT INTO members (name, phoneNumber, home, birthday, team_id, joined)
+                VALUES (?,?,?,?,?,?)`,[post.name,post.phoneNumber,post.home, birthday,post.team, joined ],(err,res, t)=>{
+            if(err) console.log(err);
+        })
+        
+        //post.specialInfo
+        
+        
+        res.writeHead(302, { Location: '/thisweek?team=' + qTeam + '&week=' + qweek });
+        res.end();
     });
 });
 
@@ -302,16 +278,16 @@ app.get('/personal', (req,res)=>{
                 WHERE members.id=?`, [mem_id],(err,prof)=>{
             db.query(`SELECT id, CONCAT(left(week,4),"년 ",substring(week,5,2),"월 ",right(week,1),"주")week,
                     mem_id, attendance, bibleRead, bibleMemorise 
-                    FROM weekly WHERE mem_id=1 and week>200000;` , [mem_id],(err,aten)=>{
+                    FROM weekly WHERE mem_id=? and week>200000;` , [mem_id],(err,aten)=>{
                 db.query(`SELECT mem_id,DATE_FORMAT(created,"%Y년%c월%d일") AS created,title,description,author 
                         FROM specialInfos LEFT JOIN SI_link ON SI_link.SI_id=specialInfos.id 
                         WHERE mem_id=?` , [mem_id],(err,info)=>{
                     
                     
-                    //임시 값 지정
-                    prof[0].birthday='1998.05.21';
-                    prof[0].home = '인천 연수구';
-                    prof[0].phoneNumber = '010-4133-6335'
+                    // //임시 값 지정
+                    // prof[0].birthday='1998.05.21';
+                    // prof[0].home = '인천 연수구';
+                    // prof[0].phoneNumber = '010-4133-6335'
                     
                     res.render('basetemp', {
                         loadPage: 'personal',
