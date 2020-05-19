@@ -1,8 +1,17 @@
 #profile {
+    margin-left: 3rem;
+    margin-right: 3rem;
 }
-
+    
 #profile .table {
     width : 250px
+}
+
+@media (min-width: 576px) {
+    #profile {
+        width : 75%;
+        margin : auto;
+    }    
 }
 
 @media (min-width: 992px) {
@@ -13,6 +22,7 @@
 
     div#personal > div {
         width: 45%;
+        margin : auto
     }
 }
 

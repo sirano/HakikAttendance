@@ -65,7 +65,7 @@ div.container-lg
 
                                 div.col.py-1.smaller
                                     //info
-                                    input.btn.btn-outline-main(type='button' value='...' id=weekly[gNum].mem_id onclick=`moreInfo(this,${week})`)
+                                    input.btn.btn-outline-main(type='button' value='...' id=weekly[gNum].mem_id onclick=`specialInfo(this,${week})`)
                                 div.col.py-1
                                     //longAbsentee
                                     -    let longAbsentee= weekly[gNum].longAbsentee ? '장기결석':'정상' ;

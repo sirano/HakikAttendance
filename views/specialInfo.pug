@@ -1,0 +1,27 @@
+div.m-5
+    h3.my-3 특이사항
+    form(action="/specialInfo_process", method="post")
+        div.form-group
+            label 제목
+            input.form-control(type='text' name='title' placeholder='제목을 입력하세요')
+
+        
+        //학생
+        div.form-group
+            div.form-row
+                div.col-7
+                    label 작성자
+                    input.form-control(type='text' name='author' placeholder='')
+                div.col-1                
+                div.col-4
+                    label 학생
+                    select(name='student_id').custom-select
+                        -for(let i=0;i<profile.length;i++)
+                            if profile[i].id===mem_id
+                                option(value='profile[i].id' selected)= profile[i].name
+                            else 
+                                option(value='profile[i].id')= profile[i].name
+        div.form-group
+            label 본문
+            textarea.form-control(name='specialInfo' rows='3' placeholder='필요한 내용을 적어주세요')
+        input.btn.btn-main(type='submit', value='저장')

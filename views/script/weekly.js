@@ -49,10 +49,10 @@ function changeMemo(self, week){
 
 }
 
-function moreInfo(self,week){
+function specialInfo(self,week){
     let mem_id=self.id;
     let _week=week
-    location.href=`/moreInfo?mem_id=${mem_id}&week=${_week}`
+    location.href=`/specialInfo?mem_id=${mem_id}&week=${_week}`
 };
 
 function newMember(self, team,week){

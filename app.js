@@ -197,15 +197,20 @@ app.post('/newMember_process', (req, res) => {
         let birthday = post.bir_y + '년 '+ post.bir_m + '월 ' + post.bir_d + '일';
         let joined = post.joinDate.substr(0,4) + '년 '+ post.joinDate.substr(4,2) + '월 '+ post.joinDate.substr(7) + '주차';
         db.query(`INSERT INTO members (name, phoneNumber, home, birthday, team_id, joined)
-                VALUES (?,?,?,?,?,?)`,[post.name,post.phoneNumber,post.home, birthday,post.team, joined ],(err,res, t)=>{
+                VALUES (?,?,?,?,?,?)`,[post.name,post.phoneNumber,post.home, birthday,post.team, joined ],(err,result)=>{
             if(err) console.log(err);
-        })
-        
-        //post.specialInfo
-        
-        
-        res.writeHead(302, { Location: '/thisweek?team=' + qTeam + '&week=' + qweek });
-        res.end();
+            
+            console.log(result);
+            
+            db.query(`INSERT INTO weekly (week,mem_id, attendance) VALUES (?,?,1)`,
+                [ post.joinDate*1, result.insertId*1 ],
+                (err,result)=>{ 
+                if(err) console.log(err);
+                
+                res.writeHead(302, { Location: '/thisweek?team=' + qTeam + '&week=' + qweek });
+                res.end();
+            });
+        });
     });
 });
 
@@ -320,6 +325,56 @@ app.get('/students', (req,res)=>{
     });
 });
 
+
+app.get('/specialInfo', (req,res)=>{
+    var _url = req.url;
+    let queryData = url.parse(_url, true).query;
+    let mem_id = queryData.mem_id;
+    let qweek = queryData.week*1;
+    db.query('SELECT id,teamName,teacher,photo FROM teams',(err,teams)=>{
+        // db.query(`SELECT members.id AS id, name, team_id, teamName 
+        //         FROM members LEFT JOIN teams ON members.team_id=teams.id`,
+        db.query(`SELECT id AS id, name FROM members `,
+                (err,prof)=>{
+            res.render('basetemp', {
+                loadPage: 'specialInfo',
+                week: qweek, //자동으로 현재 주차 나오도록
+                teams: teams,
+                mem_id : mem_id,
+                profile : prof
+            });
+        });
+    });
+});
+
+app.post('/specialInfo_process', (req,res)=>{
+    var body = '';
+    req.on('data', function(data) {
+        body += data;
+        // Too much POST data, kill the connection!
+        // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+        if (body.length > 1e6) req.connection.destroy();
+    });
+    req.on('end', function(data) {
+        //더이상 들어올 정보가 없을때 'end' 호출
+        var _url = req.url;
+        let queryData = url.parse(_url, true).query;
+        let qweek = queryData.week; //url정보 가져오기
+
+        var post = qs.parse(body); //body json 형식으로 변환
+        console.log(post);
+        
+        
+        //
+        // <===============여기할차례!!!!=================>
+        // <===============여기할차례!!!!=================>
+        // <===============여기할차례!!!!=================>
+        //
+        
+        res.writeHead(200);
+        res.end('good')
+    });
+});
 
 app.listen(3000, function() {
     console.log('Conneted 3000 port!');
